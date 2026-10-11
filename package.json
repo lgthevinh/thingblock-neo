@@ -1,0 +1,5 @@
+{
+  "name": "thingblock-neo",
+  "private": true,
+  "workspaces": ["packages/*"]
+}
