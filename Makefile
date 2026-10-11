@@ -1,4 +1,9 @@
-.PHONY: app run clean
+.PHONY: core app run clean
+
+all: core run
+
+core:
+	npm run build -w @thingblock-neo/core
 
 app:
 	cmake -S app -B build
