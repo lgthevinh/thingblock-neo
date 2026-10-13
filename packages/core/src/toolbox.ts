@@ -14,9 +14,31 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
         },
         {
             kind: 'category',
+            name: 'Logic',
+            colour: '210',
+            contents: [
+                { kind: 'block', type: 'controls_if' },
+                { kind: 'block', type: 'logic_compare' },
+                { kind: 'block', type: 'logic_operation' },
+                { kind: 'block', type: 'logic_negate' },
+                { kind: 'block', type: 'logic_boolean' },
+            ],
+        },
+        {
+            kind: 'category',
             name: 'Math',
             colour: '230',
-            contents: [{ kind: 'block', type: 'math_number' }],
+            contents: [
+                { kind: 'block', type: 'math_number' },
+                {
+                    kind: 'block',
+                    type: 'math_arithmetic',
+                    inputs: {
+                        A: { shadow: { type: 'math_number' } },
+                        B: { shadow: { type: 'math_number' } },
+                    },
+                },
+            ],
         },
         {
             kind: 'category',
