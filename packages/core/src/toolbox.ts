@@ -26,7 +26,9 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
       name: 'Arduino',
       colour: '182',
       contents: [
-        { kind: 'block', type: 'event_when_arduino_start' }
+        { kind: 'block', type: 'arduino_when_start' },
+        { kind: 'block', type: 'arduino_serial_begin' },
+        { kind: 'block', type: 'arduino_serial_print' }
       ],
     },
   ],
