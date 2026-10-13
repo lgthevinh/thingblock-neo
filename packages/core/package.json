@@ -1,17 +1,17 @@
 {
-  "name": "@thingblock-neo/core",
-  "version": "0.0.0",
-  "type": "module",
-  "main": "src/index.ts",
-  "dependencies": {
-    "blockly": "^13.3.0"
-  },
-  "devDependencies": {
-    "esbuild": "^0.28.2",
-    "typescript": "^7.0.2"
-  },
-  "scripts": {
-    "build": "esbuild src/index.ts --bundle --format=iife --global-name=ThingBlockCore --outfile=dist/core.js",
-    "typecheck": "tsc --noEmit"
-  }
+    "name": "@thingblock-neo/core",
+    "version": "0.0.0",
+    "type": "module",
+    "main": "src/index.ts",
+    "dependencies": {
+        "blockly": "^13.3.0"
+    },
+    "devDependencies": {
+        "esbuild": "^0.28.2",
+        "typescript": "^7.0.2"
+    },
+    "scripts": {
+        "build": "esbuild src/index.ts --bundle --format=iife --global-name=ThingBlockCore --outfile=dist/core.js",
+        "typecheck": "tsc --noEmit"
+    }
 }

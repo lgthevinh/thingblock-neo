@@ -16,17 +16,13 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
             kind: 'category',
             name: 'Math',
             colour: '230',
-            contents: [
-                { kind: 'block', type: 'math_number' },
-            ],
+            contents: [{ kind: 'block', type: 'math_number' }],
         },
         {
             kind: 'category',
             name: 'Text',
             colour: '160',
-            contents: [
-                { kind: 'block', type: 'text' },
-            ],
+            contents: [{ kind: 'block', type: 'text' }],
         },
         {
             kind: 'category',

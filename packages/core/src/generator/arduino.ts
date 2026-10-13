@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly';
 
-export const arduinoGenerator = new Blockly.Generator("arduino");
+export const arduinoGenerator = new Blockly.Generator('arduino');
 
 const includes = new Map<string, string>();
 const setup = new Map<string, string>();
@@ -10,8 +10,7 @@ arduinoGenerator.INDENT = '  ';
 arduinoGenerator.init = function (workspace: Blockly.Workspace) {
     includes.clear();
     setup.clear();
-}
-
+};
 
 arduinoGenerator.finish = function (code: string): string {
     const setupCode = this.prefixLines([...setup.values()].join('\n'), this.INDENT);
@@ -24,4 +23,4 @@ arduinoGenerator.finish = function (code: string): string {
     ];
 
     return sections.filter(Boolean).join('\n\n') + '\n';
-}
+};

@@ -9,9 +9,8 @@ Blockly.common.defineBlocks({
     ...events,
     ...arduino,
     ...math,
-    ...text
+    ...text,
 });
-
 
 // Re-exported so the page uses the same Blockly instance the blocks were registered on.
 export { Blockly };

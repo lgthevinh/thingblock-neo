@@ -31,7 +31,10 @@ export const arduino = {
                     {
                         type: 'field_dropdown',
                         name: 'BAUD',
-                        options: ['9600', '19200', '38400', '57600', '115200'].map((baud) => [baud, baud]),
+                        options: ['9600', '19200', '38400', '57600', '115200'].map((baud) => [
+                            baud,
+                            baud,
+                        ]),
                     },
                 ],
                 previousStatement: null,
