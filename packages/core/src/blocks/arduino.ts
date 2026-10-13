@@ -1,37 +1,56 @@
-import * as Blockly from 'blockly';
+import type * as Blockly from 'blockly';
 
 const COLOUR = 183;
 
 export const arduino = {
     arduino_when_start: {
         init(this: Blockly.Block) {
-            this.appendDummyInput().appendField('when arduino start');
-            this.setNextStatement(true);
-            this.setColour(COLOUR);
-            this.setTooltip('Run the blocks below when the board start');
+            this.jsonInit({
+                message0: 'when arduino start',
+                nextStatement: null,
+                colour: COLOUR,
+                tooltip: 'Run the blocks below when the board start',
+            });
+        },
+    },
+    arduino_when_loop: {
+        init(this: Blockly.Block) {
+            this.jsonInit({
+                message0: 'when arduino loop',
+                nextStatement: null,
+                colour: COLOUR,
+                tooltip: 'Run the blocks below repeatedly while the board is on',
+            });
         },
     },
     arduino_serial_begin: {
         init(this: Blockly.Block) {
-            this.appendDummyInput()
-                .appendField('serial begin at')
-                .appendField(new Blockly.FieldDropdown(
-                    ['9600', '19200', '38400', '57600', '115200'].map((baud) => [baud, baud]),
-                ), 'BAUD')
-                .appendField('baud');
-            this.setPreviousStatement(true);
-            this.setNextStatement(true);
-            this.setColour(COLOUR);
-            this.setTooltip('Open the serial port at the given baud rate');
+            this.jsonInit({
+                message0: 'serial begin at %1 baud',
+                args0: [
+                    {
+                        type: 'field_dropdown',
+                        name: 'BAUD',
+                        options: ['9600', '19200', '38400', '57600', '115200'].map((baud) => [baud, baud]),
+                    },
+                ],
+                previousStatement: null,
+                nextStatement: null,
+                colour: COLOUR,
+                tooltip: 'Open the serial port at the given baud rate',
+            });
         },
     },
     arduino_serial_print: {
         init(this: Blockly.Block) {
-            this.appendValueInput('TEXT').appendField('serial print');
-            this.setPreviousStatement(true);
-            this.setNextStatement(true);
-            this.setColour(COLOUR);
-            this.setTooltip('Print a value to the serial port');
+            this.jsonInit({
+                message0: 'serial print %1',
+                args0: [{ type: 'input_value', name: 'TEXT' }],
+                previousStatement: null,
+                nextStatement: null,
+                colour: COLOUR,
+                tooltip: 'Print a value to the serial port',
+            });
         },
     },
 };
