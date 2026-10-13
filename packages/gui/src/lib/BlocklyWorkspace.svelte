@@ -3,7 +3,11 @@
 
     // Mounts the Blockly workspace on the element and disposes it when the component is destroyed.
     function workspace(node: HTMLElement) {
-        const ws = Blockly.inject(node, { toolbox, media: 'media/' });
+        const ws = Blockly.inject(node, {
+            toolbox,
+            media: 'media/',
+            grid: { spacing: 20, length: 3, colour: '#ccc', snap: true },
+        });
         return { destroy: () => ws.dispose() };
     }
 </script>
