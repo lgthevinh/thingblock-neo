@@ -1,14 +1,14 @@
-.PHONY: core app run clean
+.PHONY: build-package build dev clean
 
-all: run
+all: dev
 
-core:
-	npm run build -w @thingblock-neo/core
+build-package:
+	npm run build --workspaces
 
-app:
+build:
 	npx tauri build --no-bundle
 
-run:
+dev:
 	npx tauri dev
 
 clean:
