@@ -2,8 +2,13 @@
 import * as Blockly from 'blockly';
 import { events } from './blocks/events.ts';
 import { io } from './blocks/io.ts';
+import { arduino } from './blocks/arduino.ts';
 
-Blockly.common.defineBlocks({ ...events, ...io });
+Blockly.common.defineBlocks({
+    ...events,
+    ...io,
+    ...arduino
+});
 
 // Re-exported so the page uses the same Blockly instance the blocks were registered on.
 export { Blockly };

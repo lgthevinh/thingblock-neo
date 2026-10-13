@@ -21,5 +21,13 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
         { kind: 'block', type: 'text' },
       ],
     },
+    {
+      kind: 'category',
+      name: 'Arduino',
+      colour: '182',
+      contents: [
+        { kind: 'block', type: 'event_when_arduino_start' }
+      ],
+    },
   ],
 };
