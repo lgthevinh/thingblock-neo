@@ -1,16 +1,15 @@
 .PHONY: core app run clean
 
-all: core run
+all: run
 
 core:
 	npm run build -w @thingblock-neo/core
 
 app:
-	cmake -S app -B build
-	cmake --build build
+	npx tauri build --no-bundle
 
-run: app
-	./build/thingblock_neo
+run:
+	npx tauri dev
 
 clean:
-	rm -rf build
+	rm -rf app/src-tauri/target app/src/dist
