@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "identifier": "com.thingedu.thingblock-neo",
   "build": {
-    "frontendDist": "../src",
-    "beforeDevCommand": "npm run build -w @thingblock-neo/core",
-    "beforeBuildCommand": "npm run build -w @thingblock-neo/core"
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../../packages/gui/dist",
+    "beforeDevCommand": "npm run dev -w @thingblock-neo/gui",
+    "beforeBuildCommand": "npm run build -w @thingblock-neo/gui"
   },
   "app": {
     "windows": [

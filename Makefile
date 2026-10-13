@@ -12,4 +12,4 @@ run:
 	npx tauri dev
 
 clean:
-	rm -rf app/src-tauri/target app/src/dist
+	rm -rf app/src-tauri/target packages/gui/dist packages/core/dist

@@ -3,4 +3,6 @@ app/src-tauri/target/
 app/src-tauri/gen/
 
 .vscode/
-app/src/dist/
+packages/gui/dist/
+packages/gui/public/media/
+packages/core/dist/

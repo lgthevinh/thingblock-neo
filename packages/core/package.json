@@ -11,7 +11,7 @@
     "typescript": "^7.0.2"
   },
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --format=iife --global-name=ThingBlockCore --outfile=../../app/src/dist/core.js && cp -r ../../node_modules/blockly/media ../../app/src/dist/",
+    "build": "esbuild src/index.ts --bundle --format=iife --global-name=ThingBlockCore --outfile=dist/core.js",
     "typecheck": "tsc --noEmit"
   }
 }

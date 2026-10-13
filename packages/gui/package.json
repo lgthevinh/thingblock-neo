@@ -1,0 +1,20 @@
+{
+  "name": "@thingblock-neo/gui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@tauri-apps/api": "^2.12.3",
+    "@thingblock-neo/core": "*"
+  },
+  "scripts": {
+    "media": "mkdir -p public && cp -r ../../node_modules/blockly/media public/",
+    "dev": "npm run media && vite",
+    "build": "npm run media && vite build"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "svelte": "^5.57.2",
+    "vite": "^8.3.4"
+  }
+}
