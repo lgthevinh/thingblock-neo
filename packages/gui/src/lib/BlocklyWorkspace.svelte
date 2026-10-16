@@ -7,6 +7,8 @@
             toolbox,
             media: 'media/',
             grid: { spacing: 20, length: 3, colour: '#ccc', snap: true },
+            renderer: 'zelos',
+            zoom: { startScale: 0.675, controls: true, wheel: true },
         });
         return { destroy: () => ws.dispose() };
     }
