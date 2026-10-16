@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly';
 
-export class ArduinoGenerator extends Blockly.CodeGenerator {
+class ArduinoGenerator extends Blockly.CodeGenerator {
     private readonly includes = new Map<string, string>();
     private readonly setup = new Map<string, string>();
 
@@ -27,3 +27,5 @@ export class ArduinoGenerator extends Blockly.CodeGenerator {
         return sections.filter(Boolean).join('\n\n') + '\n';
     }
 }
+
+export const arduinoGenerator = new ArduinoGenerator;
