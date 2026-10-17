@@ -4,6 +4,7 @@
     "private": true,
     "type": "module",
     "dependencies": {
+        "@blockly/continuous-toolbox": "^13.4.0",
         "@tauri-apps/api": "^2.12.3",
         "@thingblock-neo/core": "*"
     },
