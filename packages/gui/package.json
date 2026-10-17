@@ -6,7 +6,7 @@
     "dependencies": {
         "@blockly/continuous-toolbox": "^13.4.0",
         "@tauri-apps/api": "^2.12.3",
-        "@thingblock-neo/core": "*"
+        "@thingblock-neo/blocks": "*"
     },
     "scripts": {
         "media": "mkdir -p public && cp -r ../../node_modules/blockly/media public/",

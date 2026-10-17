@@ -1,5 +1,5 @@
 {
-    "name": "@thingblock-neo/core",
+    "name": "@thingblock-neo/blocks",
     "version": "0.0.0",
     "type": "module",
     "main": "src/index.ts",
@@ -11,7 +11,7 @@
         "typescript": "^7.0.2"
     },
     "scripts": {
-        "build": "esbuild src/index.ts --bundle --format=iife --global-name=ThingBlockCore --outfile=dist/core.js",
+        "build": "esbuild src/index.ts --bundle --format=iife --global-name=ThingBlockBlocks --outfile=dist/blocks.js",
         "typecheck": "tsc --noEmit"
     }
 }

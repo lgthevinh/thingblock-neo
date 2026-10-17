@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { arduinoGenerator, type Blockly } from '@thingblock-neo/core';
+    import { arduinoGenerator, type Blockly } from '@thingblock-neo/blocks';
     import BlocklyWorkspace from './lib/BlocklyWorkspace.svelte';
     import CodePanel from './lib/CodePanel.svelte';
 

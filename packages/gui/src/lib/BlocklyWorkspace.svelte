@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-    import { Blockly, toolbox } from '@thingblock-neo/core';
+    import { Blockly, toolbox } from '@thingblock-neo/blocks';
 
     let { onchange }: { onchange: (ws: Blockly.WorkspaceSvg) => void } = $props();
 

@@ -5,4 +5,4 @@ app/src-tauri/gen/
 .vscode/
 packages/gui/dist/
 packages/gui/public/media/
-packages/core/dist/
+packages/blocks/dist/
