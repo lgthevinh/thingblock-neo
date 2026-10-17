@@ -56,6 +56,13 @@
     /* Remove OCD padding at top of the toolbox */
     div :global(.blocklyToolbox) {
         padding: 0;
+        border-right: 1px solid #ddd;
+    }
+
+    /* Same divider as the code panel; content-box keeps the border outside Blockly's measured width */
+    div :global(.blocklyFlyout) {
+        border-right: 1px solid #ddd;
+        box-sizing: content-box;
     }
 
     div :global(.blocklyToolboxCategory) {
