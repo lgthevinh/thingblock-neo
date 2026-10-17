@@ -21,6 +21,8 @@
         display: flex;
         flex-direction: column;
         width: 400px;
+        min-height: 0;
+        overflow: hidden;
         border-left: 1px solid #ddd;
         background: #fafafa;
     }
@@ -47,9 +49,12 @@
     }
     pre {
         flex: 1;
+        min-height: 0;
         margin: 0;
         padding: 8px;
         overflow: auto;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
         font: 13px monospace;
     }
 </style>

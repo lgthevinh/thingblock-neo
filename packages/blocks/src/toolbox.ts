@@ -6,7 +6,7 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
         {
             kind: 'category',
             name: 'Events',
-            colour: '60',
+            categorystyle: 'event_category',
             contents: [
                 { kind: 'block', type: 'event_when_run' },
                 { kind: 'block', type: 'event_when_key_pressed' },
@@ -15,7 +15,7 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
         {
             kind: 'category',
             name: 'Logic',
-            colour: '210',
+            categorystyle: 'logic_category',
             contents: [
                 { kind: 'block', type: 'controls_if' },
                 { kind: 'block', type: 'logic_compare' },
@@ -27,7 +27,7 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
         {
             kind: 'category',
             name: 'Math',
-            colour: '230',
+            categorystyle: 'math_category',
             contents: [
                 { kind: 'block', type: 'math_number' },
                 {
@@ -43,13 +43,13 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
         {
             kind: 'category',
             name: 'Text',
-            colour: '160',
+            categorystyle: 'text_category',
             contents: [{ kind: 'block', type: 'text' }],
         },
         {
             kind: 'category',
             name: 'Arduino',
-            colour: '182',
+            categorystyle: 'arduino_category',
             contents: [
                 { kind: 'block', type: 'arduino_when_start' },
                 { kind: 'block', type: 'arduino_when_loop' },

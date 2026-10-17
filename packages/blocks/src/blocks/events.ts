@@ -1,6 +1,6 @@
 import type * as Blockly from 'blockly';
 
-const COLOUR = 60;
+const STYLE = 'event_blocks';
 
 export const events = {
     event_when_run: {
@@ -8,7 +8,7 @@ export const events = {
             this.jsonInit({
                 message0: 'when run',
                 nextStatement: null,
-                colour: COLOUR,
+                style: STYLE,
                 tooltip: 'Run the blocks below when the program starts',
             });
         },
@@ -34,7 +34,7 @@ export const events = {
                     },
                 ],
                 nextStatement: null,
-                colour: COLOUR,
+                style: STYLE,
                 tooltip: 'Run the blocks below when the key is pressed',
             });
         },

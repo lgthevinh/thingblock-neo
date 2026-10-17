@@ -22,4 +22,5 @@ Object.assign(arduinoGenerator.forBlock, arduinoCode, mathCode, textCode, logicC
 // Re-exported so the page uses the same Blockly instance the blocks were registered on.
 export { Blockly };
 export { toolbox } from './toolbox.ts';
+export { theme } from './theme.ts';
 export { arduinoGenerator };

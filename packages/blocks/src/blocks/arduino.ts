@@ -1,6 +1,6 @@
 import type * as Blockly from 'blockly';
 
-const COLOUR = 183;
+const STYLE = 'arduino_blocks';
 
 export const arduino = {
     arduino_when_start: {
@@ -8,7 +8,7 @@ export const arduino = {
             this.jsonInit({
                 message0: 'when arduino start',
                 nextStatement: null,
-                colour: COLOUR,
+                style: STYLE,
                 tooltip: 'Run the blocks below when the board start',
             });
         },
@@ -18,7 +18,7 @@ export const arduino = {
             this.jsonInit({
                 message0: 'when arduino loop',
                 nextStatement: null,
-                colour: COLOUR,
+                style: STYLE,
                 tooltip: 'Run the blocks below repeatedly while the board is on',
             });
         },
@@ -39,7 +39,7 @@ export const arduino = {
                 ],
                 previousStatement: null,
                 nextStatement: null,
-                colour: COLOUR,
+                style: STYLE,
                 tooltip: 'Open the serial port at the given baud rate',
             });
         },
@@ -51,7 +51,7 @@ export const arduino = {
                 args0: [{ type: 'input_value', name: 'TEXT' }],
                 previousStatement: null,
                 nextStatement: null,
-                colour: COLOUR,
+                style: STYLE,
                 tooltip: 'Print a value to the serial port',
             });
         },

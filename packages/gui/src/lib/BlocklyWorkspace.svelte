@@ -1,12 +1,13 @@
 <script lang="ts" module>
     import { registerContinuousToolbox } from '@blockly/continuous-toolbox';
+    import { Blockly, theme, toolbox } from '@thingblock-neo/blocks';
 
-    // Once per page, not per component: replaces the default toolbox/flyout so it stays open.
     registerContinuousToolbox();
+
+    Blockly.Scrollbar.scrollbarThickness = 12;
 </script>
 
 <script lang="ts">
-    import { Blockly, toolbox } from '@thingblock-neo/blocks';
 
     let { onchange }: { onchange: (ws: Blockly.WorkspaceSvg) => void } = $props();
 
@@ -14,15 +15,17 @@
     function workspace(node: HTMLElement) {
         const ws = Blockly.inject(node, {
             toolbox,
+            theme,
             plugins: {
                 toolbox: 'ContinuousToolbox',
                 flyoutsVerticalToolbox: 'ContinuousFlyout',
                 metricsManager: 'ContinuousMetrics',
             },
             media: 'media/',
-            grid: { spacing: 20, length: 3, colour: '#ccc', snap: true },
             renderer: 'zelos',
-            zoom: { startScale: 1.0, controls: true, wheel: true },
+            zoom: { startScale: 0.8, controls: false, wheel: false },
+            trashcan: false,
+            maxBlocks: 100,
         });
         ws.addChangeListener((e: Blockly.Events.Abstract) => {
             if (!e.isUiEvent) onchange(ws);
@@ -48,5 +51,28 @@
     div {
         height: 100%;
         width: 100%;
+    }
+
+    /* Remove OCD padding at top of the toolbox */
+    div :global(.blocklyToolbox) {
+        padding: 0;
+    }
+
+    div :global(.blocklyToolboxCategory) {
+        padding: 6pt 0pt;
+    }
+ 
+    div :global(.blocklyToolboxCategoryLabel) {
+        font-size: 10pt;
+        font-weight: normal;
+        padding-inline: 6pt;
+    }
+    /* The continuous toolbox plugin sets an inline gray on the selected row, so override it */
+    div :global(.blocklyToolboxSelected) {
+        background-color: #eee !important;
+    }
+    /* Blockly turns the selected label white; keep the normal label colour */
+    div :global(.blocklyToolboxSelected .blocklyToolboxCategoryLabel) {
+        color: inherit;
     }
 </style>
