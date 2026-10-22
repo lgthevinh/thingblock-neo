@@ -66,7 +66,7 @@
     }
 
     div :global(.blocklyToolboxCategory) {
-        padding: 6pt 0pt;
+        padding: 4pt 0pt;
     }
  
     div :global(.blocklyToolboxCategoryLabel) {
