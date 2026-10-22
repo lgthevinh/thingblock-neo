@@ -3,20 +3,14 @@
 </script>
 
 <section>
-    <header>Arduino code</header>
     <pre>{code}</pre>
 </section>
 
 <style>
     section {
         display: grid;
-        grid-template-rows: auto minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr);
         min-height: 0;
-    }
-    header {
-        padding: 6px 8px;
-        border-bottom: 1px solid #ddd;
-        font: 600 14px sans-serif;
     }
     pre {
         margin: 0;

@@ -1,7 +1,8 @@
 <script lang="ts">
     import { arduinoGenerator, type Blockly } from '@thingblock-neo/blocks';
     import BlocklyWorkspace from './lib/BlocklyWorkspace.svelte';
-    import CodePanel from './lib/components/CodePanel.svelte';
+    import CodeSubpanel from './lib/components/CodeSubpanel.svelte';
+    import MonitorSubpanel from './lib/components/MonitorSubpanel.svelte';
     import HeaderBar from './lib/HeaderBar.svelte';
     import SidePanel from './lib/SidePanel.svelte';
 
@@ -25,7 +26,8 @@
         <div><BlocklyWorkspace onchange={generate} /></div>
         {#if panelOpen}
             <SidePanel bind:width={panelWidth}>
-                <CodePanel {code} />
+                <CodeSubpanel {code} />
+                <MonitorSubpanel />
             </SidePanel>
         {/if}
     </main>
