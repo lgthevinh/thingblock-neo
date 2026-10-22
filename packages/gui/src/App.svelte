@@ -3,9 +3,11 @@
     import BlocklyWorkspace from './lib/BlocklyWorkspace.svelte';
     import CodePanel from './lib/CodePanel.svelte';
     import HeaderBar from './lib/HeaderBar.svelte';
+    import SidePanel from './lib/SidePanel.svelte';
 
     let code = $state('');
-    let collapsed = $state(false);
+    let panelOpen = $state(true);
+    let panelWidth = $state(400);
 
     // Regenerates the code; blocks without an Arduino generator throw, so show the reason instead.
     function generate(ws: Blockly.WorkspaceSvg) {
@@ -18,10 +20,14 @@
 </script>
 
 <div class="app">
-    <HeaderBar />
+    <HeaderBar {panelOpen} ontoggle={() => (panelOpen = !panelOpen)} />
     <main>
-        <div class="workspace"><BlocklyWorkspace onchange={generate} /></div>
-        <CodePanel {code} {collapsed} ontoggle={() => (collapsed = !collapsed)} />
+        <div><BlocklyWorkspace onchange={generate} /></div>
+        {#if panelOpen}
+            <SidePanel bind:width={panelWidth}>
+                <CodePanel {code} />
+            </SidePanel>
+        {/if}
     </main>
 </div>
 
@@ -34,10 +40,7 @@
     main {
         flex: 1;
         min-height: 0;
-        display: flex;
-    }
-    .workspace {
-        flex: 1;
-        min-width: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
     }
 </style>

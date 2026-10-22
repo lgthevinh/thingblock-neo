@@ -1,4 +1,6 @@
-<script lang="ts"></script>
+<script lang="ts">
+    let { panelOpen, ontoggle }: { panelOpen: boolean; ontoggle: () => void } = $props();
+</script>
 
 <header>
     <!-- Ported from thingblock-editor's thingblock-logo.jsx -->
@@ -37,6 +39,14 @@
             <tspan fill="url(#tb-logo-orange)">Thing</tspan><tspan fill="url(#tb-logo-lime)">Block</tspan>
         </text>
     </svg>
+    <button class="toggle" aria-label="Toggle side panel" aria-pressed={panelOpen} onclick={ontoggle}>
+        <!-- Sidebar icon: right column is filled while the panel is open -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="16" rx="2" />
+            <path d="M15 4v16" />
+            {#if panelOpen}<rect x="15" y="4" width="6" height="16" fill="currentColor" stroke="none" />{/if}
+        </svg>
+    </button>
 </header>
 
 <style>
@@ -57,5 +67,23 @@
     }
     .logo {
         height: 1.6rem;
+    }
+    .toggle {
+        display: grid;
+        place-items: center;
+        margin-left: auto;
+        padding: 6px;
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+    }
+    .toggle:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .toggle svg {
+        width: 22px;
+        height: 22px;
     }
 </style>
