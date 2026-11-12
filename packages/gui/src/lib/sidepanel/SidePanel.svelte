@@ -14,7 +14,7 @@
         handle.setPointerCapture(e.pointerId);
 
         const move = (ev: PointerEvent) => {
-            const max = window.innerWidth * 0.7;
+            const max = window.innerWidth * 0.4;
             width = Math.min(max, Math.max(MIN_WIDTH, startWidth + startX - ev.clientX));
         };
         const stop = () => {

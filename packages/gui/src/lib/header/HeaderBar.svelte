@@ -53,7 +53,7 @@
     /* Bundled locally so the logo renders offline */
     @font-face {
         font-family: 'Fredoka One';
-        src: url('../assets/fonts/fredoka-one.woff2') format('woff2');
+        src: url('../../assets/fonts/fredoka-one.woff2') format('woff2');
         font-display: swap;
     }
     header {

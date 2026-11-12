@@ -1,14 +1,16 @@
 <script lang="ts" module>
     import { registerContinuousToolbox } from '@blockly/continuous-toolbox';
-    import { Blockly, theme, toolbox } from '@thingblock-neo/blocks';
+    import { Blockly, setupVariables, theme, toolbox } from '@thingblock-neo/blocks';
 
     registerContinuousToolbox();
 
     Blockly.Scrollbar.scrollbarThickness = 12;
+    // Roomier flyout buttons (e.g. "Make a Variable"), closer to Scratch's.
+    Blockly.FlyoutButton.TEXT_MARGIN_X = 16;
+    Blockly.FlyoutButton.TEXT_MARGIN_Y = 8;
 </script>
 
 <script lang="ts">
-
     let { onchange }: { onchange: (ws: Blockly.WorkspaceSvg) => void } = $props();
 
     // Mounts the Blockly workspace on the element and disposes it when the component is destroyed.
@@ -23,10 +25,11 @@
             },
             media: 'media/',
             renderer: 'zelos',
-            zoom: { startScale: 0.8, controls: false, wheel: false },
+            zoom: { startScale: 0.7, controls: false, wheel: false },
             trashcan: false,
             maxBlocks: 100,
         });
+        setupVariables(ws);
         ws.addChangeListener((e: Blockly.Events.Abstract) => {
             if (!e.isUiEvent) onchange(ws);
         });
@@ -68,7 +71,7 @@
     div :global(.blocklyToolboxCategory) {
         padding: 4pt 0pt;
     }
- 
+
     div :global(.blocklyToolboxCategoryLabel) {
         font-size: 10pt;
         font-weight: normal;
@@ -77,6 +80,20 @@
     /* The continuous toolbox plugin sets an inline gray on the selected row, so override it */
     div :global(.blocklyToolboxSelected) {
         background-color: #eee !important;
+    }
+    /* Flyout buttons: white with a light border like Scratch, instead of Blockly's dark grey */
+    div :global(.blocklyFlyoutButtonBackground) {
+        fill: #fff;
+        stroke: #c6c6c6;
+    }
+    div :global(.blocklyFlyoutButton:hover .blocklyFlyoutButtonBackground) {
+        fill: #e9f1fc;
+    }
+    div :global(.blocklyFlyoutButton .blocklyText) {
+        fill: #575e75;
+    }
+    div :global(.blocklyFlyoutButtonShadow) {
+        display: none;
     }
     /* Blockly turns the selected label white; keep the normal label colour */
     div :global(.blocklyToolboxSelected .blocklyToolboxCategoryLabel) {
