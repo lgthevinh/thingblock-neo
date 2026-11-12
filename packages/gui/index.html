@@ -9,6 +9,8 @@
             #app {
                 height: 100%;
                 margin: 0;
+                /* Full-window app: only the panels scroll, never the page (Blockly's body-level popups can overflow it). */
+                overflow: hidden;
             }
         </style>
     </head>
