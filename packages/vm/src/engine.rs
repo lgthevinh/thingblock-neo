@@ -41,13 +41,13 @@ impl Engine {
         self.stack.pop().ok_or(EngineError::StackUnderflow)
     }
 
-    pub(crate) fn reset_state(&mut self) {
+    pub fn reset_state(&mut self) {
         self.pc = 0;
         self.stack.clear();
         self.call_stack.clear();
     }
 
-    pub(crate) fn exec_instruction(
+    pub fn exec_instruction(
         &mut self,
         code: &[i32],
         natives: &[NativeFn],
