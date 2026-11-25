@@ -20,6 +20,34 @@ export const logic = {
         if (block.getInput('ELSE')) code += generator.statementToCode(block, 'ELSE');
         return code + `${end}:\n`;
     },
+    // The counter lives in a hidden variable slot, since the stack has no DUP to keep it there.
+    control_repeat(block: Blockly.Block, generator: ThingcodeGenerator) {
+        const counter = generator.variable(`repeat:${block.id}`);
+        const start = generator.label();
+        const end = generator.label();
+        const code =
+            value(block, generator, 'TIMES') +
+            op('STORE', counter) +
+            `${start}:\n` +
+            op('LOAD', counter) +
+            op('PSH', 0) +
+            op('GT') +
+            op('PSH', 0) +
+            op('EQ') +
+            op('JNZ', end);
+        const step = op('LOAD', counter) + op('PSH', 1) + op('SUB') + op('STORE', counter);
+        return (
+            code +
+            generator.statementToCode(block, 'SUBSTACK') +
+            step +
+            op('JMP', start) +
+            `${end}:\n`
+        );
+    },
+    control_forever(block: Blockly.Block, generator: ThingcodeGenerator) {
+        const start = generator.label();
+        return `${start}:\n` + generator.statementToCode(block, 'SUBSTACK') + op('JMP', start);
+    },
     control_while(block: Blockly.Block, generator: ThingcodeGenerator) {
         const start = generator.label();
         const end = generator.label();
@@ -30,6 +58,9 @@ export const logic = {
             op('EQ') +
             op('JNZ', end);
         return code + generator.statementToCode(block, 'SUBSTACK') + op('JMP', start) + `${end}:\n`;
+    },
+    control_wait(block: Blockly.Block, generator: ThingcodeGenerator) {
+        return value(block, generator, 'MS') + op('WAIT');
     },
     // Blockly's OP values (EQ, NEQ, LT, LTE, GT, GTE) are the VM's opcode names.
     logic_compare(block: Blockly.Block, generator: ThingcodeGenerator): [string, number] {

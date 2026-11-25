@@ -27,11 +27,6 @@ const styles = {
         colourSecondary: '#FF8000',
         colourTertiary: '#DB6E00',
     },
-    thingbot_blocks: {
-        colourPrimary: '#4C97FF',
-        colourSecondary: '#4280D7',
-        colourTertiary: '#3373CC',
-    },
     // Scratch's extension green, matching the editor's Telemetrix icon.
     thingbot_telemetrix_blocks: {
         colourPrimary: '#0FBD8C',

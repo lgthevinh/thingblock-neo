@@ -1,10 +1,12 @@
-// Mirrors the OpCode enum in thingbot-vm main/vm/opcode.h; an opcode's value is its index here.
+// Mirrors OpCode in packages/vm/src/engine/opcode.rs; an opcode's value is its index here.
 export const OPCODES = [
     'HLT',
     'PSH',
     'ADD',
     'SUB',
     'MUL',
+    'DIV',
+    'MOD',
     'LOAD',
     'STORE',
     'JMP',
@@ -18,11 +20,8 @@ export const OPCODES = [
     'CALL',
     'RET',
     'WAIT',
-    'MOTOR',
-    'SERVO',
-    'SPIN',
-    'BUZZ',
-    'LED',
+    'INVOKE_STATIC',
+    'INVOKE_NATIVE',
 ] as const;
 
 export type OpName = (typeof OPCODES)[number];

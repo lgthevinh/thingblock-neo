@@ -47,4 +47,30 @@ export const math = {
             });
         },
     },
+    // Replaces Blockly's stock block to leave out ^, which the VM has no opcode for.
+    math_arithmetic: {
+        init(this: Blockly.Block) {
+            this.jsonInit({
+                message0: '%1 %2 %3',
+                args0: [
+                    { type: 'input_value', name: 'A', check: 'Number' },
+                    {
+                        type: 'field_dropdown',
+                        name: 'OP',
+                        options: [
+                            ['+', 'ADD'],
+                            ['−', 'MINUS'],
+                            ['×', 'MULTIPLY'],
+                            ['÷', 'DIVIDE'],
+                        ],
+                    },
+                    { type: 'input_value', name: 'B', check: 'Number' },
+                ],
+                inputsInline: true,
+                output: 'Number',
+                style: STYLE,
+                tooltip: 'Add, subtract, multiply or divide two whole numbers',
+            });
+        },
+    },
 };

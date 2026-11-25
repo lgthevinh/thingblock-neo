@@ -6,6 +6,7 @@ const OPERATORS: Record<string, OpName> = {
     ADD: 'ADD',
     MINUS: 'SUB',
     MULTIPLY: 'MUL',
+    DIVIDE: 'DIV',
 };
 
 // Shared by every number block variant: they differ only in field constraints.
@@ -30,6 +31,12 @@ export const math = {
             );
         return [
             value(block, generator, 'A') + value(block, generator, 'B') + op(name),
+            Order.ATOMIC,
+        ];
+    },
+    math_modulo(block: Blockly.Block, generator: ThingcodeGenerator): [string, number] {
+        return [
+            value(block, generator, 'DIVIDEND') + value(block, generator, 'DIVISOR') + op('MOD'),
             Order.ATOMIC,
         ];
     },

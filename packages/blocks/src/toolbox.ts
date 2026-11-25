@@ -89,7 +89,10 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
             categorystyle: 'logic_category',
             contents: [
                 { kind: 'block', type: 'controls_if' },
+                { kind: 'block', type: 'control_repeat', inputs: { TIMES: number(10) } },
+                { kind: 'block', type: 'control_forever' },
                 { kind: 'block', type: 'control_while' },
+                { kind: 'block', type: 'control_wait', inputs: { MS: number(1000) } },
                 { kind: 'block', type: 'logic_compare' },
                 { kind: 'block', type: 'logic_operation' },
                 { kind: 'block', type: 'logic_negate' },
@@ -110,13 +113,12 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
                         B: { shadow: { type: 'math_number' } },
                     },
                 },
+                {
+                    kind: 'block',
+                    type: 'math_modulo',
+                    inputs: { DIVIDEND: number(10), DIVISOR: number(3) },
+                },
             ],
-        },
-        {
-            kind: 'category',
-            name: 'Text',
-            categorystyle: 'text_category',
-            contents: [{ kind: 'block', type: 'text' }],
         },
         {
             kind: 'category',
