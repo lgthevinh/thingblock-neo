@@ -1,6 +1,8 @@
 mod error;
 mod opcode;
 
+use std::ops::Range;
+
 pub use error::EngineError;
 pub use opcode::OpCode;
 
@@ -9,6 +11,7 @@ use crate::Runtime;
 const STACK_LEN: usize = 256;
 const GLOBAL_SLOT: usize = 16;
 const CALL_DEPTH: usize = 8;
+const MEM_LEN: usize = 4096;
 
 pub type NativeFn = fn(&mut Engine, &mut Runtime) -> Result<(), EngineError>;
 
@@ -16,16 +19,27 @@ pub type NativeFn = fn(&mut Engine, &mut Runtime) -> Result<(), EngineError>;
 pub enum EngineStatus {
     Halted,
     Waiting(u32),
-    /// Stopped through `Vm::stop_flag`.
     Stopped,
 }
 
-#[derive(Default)]
 pub struct Engine {
     pc: usize,
     stack: Vec<i32>,
     call_stack: Vec<usize>,
     globals: [i32; GLOBAL_SLOT],
+    memory: [u8; MEM_LEN],
+}
+
+impl Default for Engine {
+    fn default() -> Self {
+        Self {
+            pc: 0,
+            stack: Vec::new(),
+            call_stack: Vec::new(),
+            globals: [0; GLOBAL_SLOT],
+            memory: [0; MEM_LEN],
+        }
+    }
 }
 
 impl Engine {
@@ -45,6 +59,7 @@ impl Engine {
         self.pc = 0;
         self.stack.clear();
         self.call_stack.clear();
+        self.memory.fill(0);
     }
 
     pub fn exec_instruction(
@@ -113,6 +128,28 @@ impl Engine {
                     .ok_or(EngineError::BadNative(id))?;
                 native(self, runtime)?;
             }
+            OpCode::MLoad8 => {
+                let addr = self.pop_stack()?;
+                let i = Self::mem_range(addr, 1)?.start;
+                self.push_stack(self.memory[i] as i32)?;
+            }
+            OpCode::MStore8 => {
+                let byte = self.pop_stack()?;
+                let addr = self.pop_stack()?;
+                let i = Self::mem_range(addr, 1)?.start;
+                self.memory[i] = byte as u8;
+            }
+            OpCode::MLoad32 => {
+                let addr = self.pop_stack()?;
+                let mut bytes = [0; 4];
+                bytes.copy_from_slice(&self.memory[Self::mem_range(addr, 4)?]);
+                self.push_stack(i32::from_le_bytes(bytes))?;
+            }
+            OpCode::MStore32 => {
+                let word = self.pop_stack()?;
+                let addr = self.pop_stack()?;
+                self.memory[Self::mem_range(addr, 4)?].copy_from_slice(&word.to_le_bytes());
+            }
         }
         Ok(None)
     }
@@ -155,5 +192,13 @@ impl Engine {
             .ok()
             .filter(|&i| i < GLOBAL_SLOT)
             .ok_or(EngineError::BadGlobal(idx))
+    }
+
+    fn mem_range(addr: i32, len: usize) -> Result<Range<usize>, EngineError> {
+        usize::try_from(addr)
+            .ok()
+            .filter(|&a| a + len <= MEM_LEN)
+            .map(|a| a..a + len)
+            .ok_or(EngineError::BadAddress(addr))
     }
 }

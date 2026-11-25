@@ -25,6 +25,10 @@ pub enum OpCode {
     Wait,
     InvokeStatic,
     InvokeNative,
+    MLoad8,
+    MStore8,
+    MLoad32,
+    MStore32,
 }
 
 impl TryFrom<i32> for OpCode {
@@ -55,6 +59,10 @@ impl TryFrom<i32> for OpCode {
             19 => Wait,
             20 => InvokeStatic,
             21 => InvokeNative,
+            22 => MLoad8,
+            23 => MStore8,
+            24 => MLoad32,
+            25 => MStore32,
             _ => return Err(EngineError::BadOpcode(val)),
         })
     }

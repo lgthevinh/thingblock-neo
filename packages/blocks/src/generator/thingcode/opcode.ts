@@ -22,6 +22,10 @@ export const OPCODES = [
     'WAIT',
     'INVOKE_STATIC',
     'INVOKE_NATIVE',
+    'MLOAD8',
+    'MSTORE8',
+    'MLOAD32',
+    'MSTORE32',
 ] as const;
 
 export type OpName = (typeof OPCODES)[number];
