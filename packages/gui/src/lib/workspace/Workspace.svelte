@@ -56,8 +56,10 @@
         width: 100%;
     }
 
-    /* Remove OCD padding at top of the toolbox */
+    /* Remove OCD padding at top of the toolbox. Fixed width so long names wrap instead of widening it;
+       Blockly measures the width after render. */
     div :global(.blocklyToolbox) {
+        width: 80px;
         padding: 0;
         border-right: 1px solid #ddd;
     }
@@ -70,6 +72,7 @@
 
     div :global(.blocklyToolboxCategory) {
         padding: 4pt 0pt;
+        white-space: normal;
     }
 
     div :global(.blocklyToolboxCategoryLabel) {
