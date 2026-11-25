@@ -10,7 +10,7 @@ use crate::Runtime;
 
 const STACK_LEN: usize = 256;
 const GLOBAL_SLOT: usize = 256;
-const CALL_DEPTH: usize = 8;
+const CALL_DEPTH: usize = 64;
 const MEM_LEN: usize = 4096;
 
 pub type NativeFn = fn(&mut Engine, &mut Runtime) -> Result<(), EngineError>;
