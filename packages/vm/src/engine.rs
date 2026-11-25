@@ -11,9 +11,11 @@ const CALL_DEPTH: usize = 8;
 pub type NativeFn = fn(&mut Engine) -> Result<(), EngineError>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Status {
+pub enum EngineStatus {
     Halted,
     Waiting(u32),
+    /// Stopped through `Vm::stop_flag`.
+    Stopped,
 }
 
 #[derive(Default)]
@@ -47,12 +49,12 @@ impl Engine {
         &mut self,
         code: &[i32],
         natives: &[NativeFn],
-    ) -> Result<Option<Status>, EngineError> {
+    ) -> Result<Option<EngineStatus>, EngineError> {
         let op = OpCode::try_from(self.fetch_slot(code)?)?;
         match op {
             OpCode::Hlt => {
                 self.pc -= 1;
-                return Ok(Some(Status::Halted));
+                return Ok(Some(EngineStatus::Halted));
             }
             OpCode::Psh => {
                 let val = self.fetch_slot(code)?;
@@ -61,6 +63,8 @@ impl Engine {
             OpCode::Add => self.apply_binary_op(i32::wrapping_add)?,
             OpCode::Sub => self.apply_binary_op(i32::wrapping_sub)?,
             OpCode::Mul => self.apply_binary_op(i32::wrapping_mul)?,
+            OpCode::Div => self.apply_division_op(i32::wrapping_div)?,
+            OpCode::Mod => self.apply_division_op(i32::wrapping_rem)?,
             OpCode::Load => {
                 let idx = self.fetch_local_index(code)?;
                 let val = self.locals[idx];
@@ -95,7 +99,7 @@ impl Engine {
             OpCode::Ret => self.pc = self.call_stack.pop().ok_or(EngineError::CallUnderflow)?,
             OpCode::Wait => {
                 let ms = self.pop_stack()?;
-                return Ok(Some(Status::Waiting(ms.max(0) as u32)));
+                return Ok(Some(EngineStatus::Waiting(ms.max(0) as u32)));
             }
             OpCode::InvokeStatic => return Err(EngineError::NotImplemented(op)),
             OpCode::InvokeNative => {
@@ -121,6 +125,16 @@ impl Engine {
     fn apply_binary_op(&mut self, f: fn(i32, i32) -> i32) -> Result<(), EngineError> {
         let b = self.pop_stack()?;
         let a = self.pop_stack()?;
+        self.push_stack(f(a, b))
+    }
+
+    fn apply_division_op(&mut self, f: fn(i32, i32) -> i32) -> Result<(), EngineError> {
+        let b = self.pop_stack()?;
+        let a = self.pop_stack()?;
+        if b == 0 {
+            return Err(EngineError::DivByZero);
+        }
+        // wrapping covers i32::MIN / -1, the one other case that overflows
         self.push_stack(f(a, b))
     }
 

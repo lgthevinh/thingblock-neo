@@ -3,5 +3,5 @@
 mod engine;
 mod vm;
 
-pub use engine::{Engine, EngineError, NativeFn, OpCode, Status};
+pub use engine::{Engine, EngineError, EngineStatus, NativeFn, OpCode};
 pub use vm::Vm;
