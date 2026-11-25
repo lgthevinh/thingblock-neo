@@ -56,14 +56,19 @@ export class ThingbotVmGenerator extends Blockly.CodeGenerator {
     }
 
     // Blocks the VM can't run generate nothing: a statement passes on to the next one, a value reads as empty.
-    override blockToCode(block: Blockly.Block | null, thisOnly?: boolean): string | [string, number] {
+    override blockToCode(
+        block: Blockly.Block | null,
+        thisOnly?: boolean,
+    ): string | [string, number] {
         if (block && !this.forBlock[block.type]) return this.scrub_(block, '', thisOnly);
         return super.blockToCode(block, thisOnly);
     }
 
     override finish(_code: string): string {
         // The VM keeps variable slots between runs, so start them from 0.
-        let asm = [...this.variables.values()].map((slot) => op('PSH', 0) + op('STORE', slot)).join('');
+        let asm = [...this.variables.values()]
+            .map((slot) => op('PSH', 0) + op('STORE', slot))
+            .join('');
         // Outputs hold their last value after HLT.
         asm += this.start.join('') + [...this.stops].join('') + op('HLT');
         this.isInitialized = false;

@@ -23,7 +23,12 @@ export const logic = {
     control_while(block: Blockly.Block, generator: ThingbotVmGenerator) {
         const start = generator.label();
         const end = generator.label();
-        const code = `${start}:\n` + value(block, generator, 'CONDITION') + op('PSH', 0) + op('EQ') + op('JNZ', end);
+        const code =
+            `${start}:\n` +
+            value(block, generator, 'CONDITION') +
+            op('PSH', 0) +
+            op('EQ') +
+            op('JNZ', end);
         return code + generator.statementToCode(block, 'SUBSTACK') + op('JMP', start) + `${end}:\n`;
     },
     // Blockly's OP values (EQ, NEQ, LT, LTE, GT, GTE) are the VM's opcode names.

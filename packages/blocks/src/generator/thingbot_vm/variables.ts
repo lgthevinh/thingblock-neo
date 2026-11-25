@@ -6,7 +6,10 @@ export const variables = {
         return [op('LOAD', generator.variable(block.getFieldValue('VARIABLE'))), Order.ATOMIC];
     },
     data_setvariableto(block: Blockly.Block, generator: ThingbotVmGenerator) {
-        return value(block, generator, 'VALUE') + op('STORE', generator.variable(block.getFieldValue('VARIABLE')));
+        return (
+            value(block, generator, 'VALUE') +
+            op('STORE', generator.variable(block.getFieldValue('VARIABLE')))
+        );
     },
     data_changevariableby(block: Blockly.Block, generator: ThingbotVmGenerator) {
         const slot = generator.variable(block.getFieldValue('VARIABLE'));

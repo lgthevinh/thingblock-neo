@@ -37,10 +37,15 @@ export const variables = {
             });
         },
         // In the flyout, right-click offers rename and delete like Scratch; the reporter has no dropdown for them.
-        customContextMenu(this: Blockly.BlockSvg, options: Blockly.ContextMenuRegistry.LegacyContextMenuOption[]) {
+        customContextMenu(
+            this: Blockly.BlockSvg,
+            options: Blockly.ContextMenuRegistry.LegacyContextMenuOption[],
+        ) {
             if (!this.isInFlyout) return;
             const workspace = this.workspace.targetWorkspace ?? this.workspace;
-            const variable = workspace.getVariableMap().getVariableById(this.getFieldValue('VARIABLE'));
+            const variable = workspace
+                .getVariableMap()
+                .getVariableById(this.getFieldValue('VARIABLE'));
             if (!variable) return;
             options.length = 0;
             options.push(
