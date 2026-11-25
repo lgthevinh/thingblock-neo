@@ -1,6 +1,6 @@
 import type * as Blockly from 'blockly';
-import { op, value, type ThingbotVmGenerator } from '../thingbot_vm.ts';
-import type { OpName } from './opcode.ts';
+import { op, value, type ThingbotVmGenerator } from '../../generator/thingbot_vm.ts';
+import type { OpName } from '../../generator/thingbot_vm/opcode.ts';
 
 // Device picked by the ID dropdown: pushes the id, then the input value, then runs the opcode.
 function device(name: OpName, input: string, stoppable: boolean) {

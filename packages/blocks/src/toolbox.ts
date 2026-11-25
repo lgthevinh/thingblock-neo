@@ -9,7 +9,10 @@ function number(value: number) {
 
 /** Scratch-style Variables flyout: the create button, a reporter per variable, then set and change. */
 function variablesCategory(workspace: Blockly.WorkspaceSvg): utils.toolbox.FlyoutItemInfoArray {
-    const variables = workspace.getVariableMap().getVariablesOfType('').sort(Blockly.Variables.compareByName);
+    const variables = workspace
+        .getVariableMap()
+        .getVariablesOfType('')
+        .sort(Blockly.Variables.compareByName);
     const button: utils.toolbox.ButtonInfo = {
         kind: 'button',
         text: Blockly.Msg.NEW_VARIABLE,
@@ -17,7 +20,9 @@ function variablesCategory(workspace: Blockly.WorkspaceSvg): utils.toolbox.Flyou
     };
     if (!variables.length) return [button];
 
-    const field = (variable: Blockly.IVariableModel<Blockly.IVariableState>) => ({ VARIABLE: { id: variable.getId() } });
+    const field = (variable: Blockly.IVariableModel<Blockly.IVariableState>) => ({
+        VARIABLE: { id: variable.getId() },
+    });
     const reporters: utils.toolbox.BlockInfo[] = variables.map((variable) => ({
         kind: 'block',
         type: 'data_variable',
@@ -31,8 +36,20 @@ function variablesCategory(workspace: Blockly.WorkspaceSvg): utils.toolbox.Flyou
     return [
         button,
         ...reporters,
-        { kind: 'block', type: 'data_setvariableto', gap: 8, fields: field(first), inputs: { VALUE: number(0) } },
-        { kind: 'block', type: 'data_changevariableby', gap: 8, fields: field(first), inputs: { VALUE: number(1) } },
+        {
+            kind: 'block',
+            type: 'data_setvariableto',
+            gap: 8,
+            fields: field(first),
+            inputs: { VALUE: number(0) },
+        },
+        {
+            kind: 'block',
+            type: 'data_changevariableby',
+            gap: 8,
+            fields: field(first),
+            inputs: { VALUE: number(1) },
+        },
     ];
 }
 
@@ -109,15 +126,72 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
         },
         {
             kind: 'category',
-            name: 'ThingBot',
-            categorystyle: 'thingbot_category',
+            name: 'ThingBot Telemetrix',
+            categorystyle: 'thingbot_telemetrix_category',
             contents: [
-                { kind: 'block', type: 'thingbot_motor', inputs: { SPEED: number(50) } },
-                { kind: 'block', type: 'thingbot_servo', inputs: { ANGLE: number(90) } },
-                { kind: 'block', type: 'thingbot_spin', inputs: { SPEED: number(50) } },
-                { kind: 'block', type: 'thingbot_led', inputs: { BRIGHTNESS: number(100) } },
-                { kind: 'block', type: 'thingbot_buzzer', inputs: { DUTY: number(50) } },
-                { kind: 'block', type: 'thingbot_wait', inputs: { MS: number(1000) } },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_set_pin_mode',
+                    inputs: { PIN: number(13) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_digital_write',
+                    inputs: { PIN: number(13) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_digital_read',
+                    inputs: { PIN: number(2) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_analog_read',
+                    inputs: { PIN: number(0) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_pwm_write',
+                    inputs: { PIN: number(9), VALUE: number(128) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_servo_write',
+                    inputs: { ANGLE: number(90) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_control_dc',
+                    inputs: { SPEED: number(50) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_control_buzzer',
+                    inputs: { FREQ: number(50) },
+                },
+                { kind: 'block', type: 'thingbot_telemetrix_control_led' },
+                // IO7 is the PS2 DATA line and IO8 the PCA9685's SDA, so default clear of both.
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_setup_ultrasonic',
+                    inputs: { TRIG: number(0), ECHO: number(4) },
+                },
+                { kind: 'block', type: 'thingbot_telemetrix_read_distance' },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_setup_dht',
+                    inputs: { PIN: number(4) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_read_temperature',
+                    inputs: { PIN: number(4) },
+                },
+                {
+                    kind: 'block',
+                    type: 'thingbot_telemetrix_read_humidity',
+                    inputs: { PIN: number(4) },
+                },
             ],
         },
     ],
