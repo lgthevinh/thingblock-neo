@@ -7,7 +7,7 @@ export const Order = {
     NONE: 99,
 };
 
-export const MAX_VARIABLES = 16;
+export const MAX_VARIABLES = 256;
 
 /** One assembly line: an opcode with an optional operand (a number or a label). */
 export function op(name: OpName, operand?: number | string): string {

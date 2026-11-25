@@ -9,7 +9,7 @@ pub use opcode::OpCode;
 use crate::Runtime;
 
 const STACK_LEN: usize = 256;
-const GLOBAL_SLOT: usize = 16;
+const GLOBAL_SLOT: usize = 256;
 const CALL_DEPTH: usize = 8;
 const MEM_LEN: usize = 4096;
 
@@ -59,6 +59,7 @@ impl Engine {
         self.pc = 0;
         self.stack.clear();
         self.call_stack.clear();
+        self.globals.fill(0);
         self.memory.fill(0);
     }
 
