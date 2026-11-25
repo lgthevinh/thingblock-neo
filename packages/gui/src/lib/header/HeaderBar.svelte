@@ -1,61 +1,75 @@
 <script lang="ts">
-    let { panelOpen, ontoggle }: { panelOpen: boolean; ontoggle: () => void } = $props();
+    import Logo from './Logo.svelte';
+
+    let {
+        panels = $bindable(),
+        onsettings,
+    }: { panels: { code: boolean; monitor: boolean }; onsettings: () => void } = $props();
+
+    let menuOpen = $state(false);
+    let menuRoot: HTMLElement;
+
+    // Capture phase, since Blockly stops some pointer events on the workspace from bubbling.
+    function closeOutside(e: PointerEvent) {
+        if (menuOpen && !menuRoot.contains(e.target as Node)) menuOpen = false;
+    }
 </script>
 
+<svelte:window
+    onpointerdowncapture={closeOutside}
+    onkeydown={(e) => e.key === 'Escape' && (menuOpen = false)}
+/>
+
 <header>
-    <!-- Ported from thingblock-editor's thingblock-logo.jsx -->
-    <svg
-        class="logo"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 175 40"
-        overflow="visible"
-        aria-label="ThingBlock"
-        role="img"
-    >
-        <defs>
-            <linearGradient id="tb-logo-orange" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#FFD166" />
-                <stop offset="100%" stop-color="#FF7B35" />
-            </linearGradient>
-            <linearGradient id="tb-logo-lime" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#D9F99D" />
-                <stop offset="100%" stop-color="#84CC16" />
-            </linearGradient>
-            <filter id="tb-logo-shadow">
-                <feDropShadow dx="1" dy="2" stdDeviation="0.5" flood-color="#0D2800" flood-opacity="0.75" />
-            </filter>
-        </defs>
-        <text
-            x="2"
-            y="30"
-            font-family="'Fredoka One', cursive"
-            font-size="31"
-            stroke="white"
-            stroke-width="5.5"
-            stroke-linejoin="round"
-            paint-order="stroke fill"
-            filter="url(#tb-logo-shadow)"
-        >
-            <tspan fill="url(#tb-logo-orange)">Thing</tspan><tspan fill="url(#tb-logo-lime)">Block</tspan>
-        </text>
-    </svg>
-    <button class="toggle" aria-label="Toggle side panel" aria-pressed={panelOpen} onclick={ontoggle}>
-        <!-- Sidebar icon: right column is filled while the panel is open -->
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="16" rx="2" />
-            <path d="M15 4v16" />
-            {#if panelOpen}<rect x="15" y="4" width="6" height="16" fill="currentColor" stroke="none" />{/if}
-        </svg>
-    </button>
+    <Logo />
+    <div class="actions">
+        <button class="icon" aria-label="Settings" title="Settings" onclick={onsettings}>
+            <!-- Lucide "settings" icon -->
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+            >
+                <path
+                    d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+        </button>
+        <div class="panels" bind:this={menuRoot}>
+            <button
+                class="icon"
+                class:open={menuOpen}
+                aria-label="Show panels"
+                title="Show panels"
+                aria-haspopup="true"
+                aria-expanded={menuOpen}
+                onclick={() => (menuOpen = !menuOpen)}
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                >
+                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                    <path d="M15 4v16" />
+                </svg>
+            </button>
+            {#if menuOpen}
+                <div class="menu">
+                    <label><input type="checkbox" bind:checked={panels.code} /> Code (debug)</label>
+                    <label><input type="checkbox" bind:checked={panels.monitor} /> Monitor</label>
+                </div>
+            {/if}
+        </div>
+    </div>
 </header>
 
 <style>
-    /* Bundled locally so the logo renders offline */
-    @font-face {
-        font-family: 'Fredoka One';
-        src: url('../../assets/fonts/fredoka-one.woff2') format('woff2');
-        font-display: swap;
-    }
     header {
         display: flex;
         align-items: center;
@@ -65,13 +79,14 @@
         background: #4c97ff;
         color: #fff;
     }
-    .logo {
-        height: 1.6rem;
+    .actions {
+        display: flex;
+        gap: 4px;
+        margin-left: auto;
     }
-    .toggle {
+    .icon {
         display: grid;
         place-items: center;
-        margin-left: auto;
         padding: 6px;
         border: none;
         border-radius: 6px;
@@ -79,11 +94,45 @@
         color: #fff;
         cursor: pointer;
     }
-    .toggle:hover {
+    .icon:hover,
+    .icon.open {
         background: rgba(255, 255, 255, 0.15);
     }
-    .toggle svg {
+    .icon svg {
         width: 22px;
         height: 22px;
+    }
+    .panels {
+        position: relative;
+    }
+    /* Drops below the button, aligned to the header's right edge. */
+    .menu {
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 0;
+        z-index: 10;
+        display: grid;
+        min-width: 140px;
+        padding: 4px;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font: 14px sans-serif;
+        color: #575e75;
+    }
+    label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 8px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    label:hover {
+        background: #f0f4ff;
+    }
+    input {
+        margin: 0;
+        accent-color: #4c97ff;
     }
 </style>

@@ -6,10 +6,33 @@
     import HeaderBar from './lib/header/HeaderBar.svelte';
     import SidePanel from './lib/sidepanel/SidePanel.svelte';
     import BlocklyDialogs from './lib/workspace/BlocklyDialogs.svelte';
+    import SettingsDialog from './lib/settings/SettingsDialog.svelte';
+
+    const PANELS_KEY = 'thingblock.panels';
 
     let code = $state('');
-    let panelOpen = $state(true);
+    let panels = $state(loadPanels());
+    let settingsOpen = $state(false);
     let panelWidth = $state(400);
+
+    // The code panel is for debugging the generator, so it starts hidden. Storage can be missing or throw
+    // (private windows), so fall back to the defaults.
+    function loadPanels() {
+        const shown = { code: false, monitor: true };
+        try {
+            return { ...shown, ...JSON.parse(localStorage.getItem(PANELS_KEY) ?? '{}') };
+        } catch {
+            return shown;
+        }
+    }
+
+    $effect(() => {
+        try {
+            localStorage.setItem(PANELS_KEY, JSON.stringify(panels));
+        } catch {
+            // Not remembered across reloads, which is harmless.
+        }
+    });
 
     // Regenerates the code; blocks the VM can't run throw, so show the reason instead.
     function generate(ws: Blockly.WorkspaceSvg) {
@@ -22,17 +45,18 @@
 </script>
 
 <div class="app">
-    <HeaderBar {panelOpen} ontoggle={() => (panelOpen = !panelOpen)} />
+    <HeaderBar bind:panels onsettings={() => (settingsOpen = true)} />
     <main>
         <div><Workspace onchange={generate} /></div>
-        {#if panelOpen}
+        {#if panels.code || panels.monitor}
             <SidePanel bind:width={panelWidth}>
-                <CodeSubpanel {code} />
-                <MonitorSubpanel />
+                {#if panels.code}<CodeSubpanel {code} />{/if}
+                {#if panels.monitor}<MonitorSubpanel />{/if}
             </SidePanel>
         {/if}
     </main>
     <BlocklyDialogs />
+    {#if settingsOpen}<SettingsDialog onclose={() => (settingsOpen = false)} />{/if}
 </div>
 
 <style>
