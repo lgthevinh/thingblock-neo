@@ -1,6 +1,7 @@
 node_modules/
 app/src-tauri/target/
 app/src-tauri/gen/
+packages/vm/target/
 
 .vscode/
 packages/gui/dist/
