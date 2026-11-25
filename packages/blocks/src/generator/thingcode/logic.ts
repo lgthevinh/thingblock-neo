@@ -27,15 +27,15 @@ export const logic = {
         const end = generator.label();
         const code =
             value(block, generator, 'TIMES') +
-            op('STORE', counter) +
+            op('GSTORE', counter) +
             `${start}:\n` +
-            op('LOAD', counter) +
+            op('GLOAD', counter) +
             op('PSH', 0) +
             op('GT') +
             op('PSH', 0) +
             op('EQ') +
             op('JNZ', end);
-        const step = op('LOAD', counter) + op('PSH', 1) + op('SUB') + op('STORE', counter);
+        const step = op('GLOAD', counter) + op('PSH', 1) + op('SUB') + op('GSTORE', counter);
         return (
             code +
             generator.statementToCode(block, 'SUBSTACK') +

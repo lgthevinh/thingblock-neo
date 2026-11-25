@@ -7,7 +7,7 @@ pub use opcode::OpCode;
 use crate::Runtime;
 
 const STACK_LEN: usize = 256;
-const LOCAL_SLOT: usize = 16;
+const GLOBAL_SLOT: usize = 16;
 const CALL_DEPTH: usize = 8;
 
 pub type NativeFn = fn(&mut Engine, &mut Runtime) -> Result<(), EngineError>;
@@ -25,7 +25,7 @@ pub struct Engine {
     pc: usize,
     stack: Vec<i32>,
     call_stack: Vec<usize>,
-    locals: [i32; LOCAL_SLOT],
+    globals: [i32; GLOBAL_SLOT],
 }
 
 impl Engine {
@@ -68,14 +68,14 @@ impl Engine {
             OpCode::Mul => self.apply_binary_op(i32::wrapping_mul)?,
             OpCode::Div => self.apply_division_op(i32::wrapping_div)?,
             OpCode::Mod => self.apply_division_op(i32::wrapping_rem)?,
-            OpCode::Load => {
-                let idx = self.fetch_local_index(code)?;
-                let val = self.locals[idx];
+            OpCode::GLoad => {
+                let idx = self.fetch_global_index(code)?;
+                let val = self.globals[idx];
                 self.push_stack(val)?;
             }
-            OpCode::Store => {
-                let idx = self.fetch_local_index(code)?;
-                self.locals[idx] = self.pop_stack()?;
+            OpCode::GStore => {
+                let idx = self.fetch_global_index(code)?;
+                self.globals[idx] = self.pop_stack()?;
             }
             OpCode::Jmp => self.pc = self.fetch_target(code)?,
             OpCode::Jnz => {
@@ -149,11 +149,11 @@ impl Engine {
             .ok_or(EngineError::BadTarget(target))
     }
 
-    fn fetch_local_index(&mut self, code: &[i32]) -> Result<usize, EngineError> {
+    fn fetch_global_index(&mut self, code: &[i32]) -> Result<usize, EngineError> {
         let idx = self.fetch_slot(code)?;
         usize::try_from(idx)
             .ok()
-            .filter(|&i| i < LOCAL_SLOT)
-            .ok_or(EngineError::BadLocal(idx))
+            .filter(|&i| i < GLOBAL_SLOT)
+            .ok_or(EngineError::BadGlobal(idx))
     }
 }

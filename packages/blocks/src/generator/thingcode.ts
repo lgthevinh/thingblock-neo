@@ -74,7 +74,7 @@ export class ThingcodeGenerator extends Blockly.CodeGenerator {
     override finish(_code: string): string {
         // The VM keeps variable slots between runs, so start them from 0.
         let asm = [...this.variables.values()]
-            .map((slot) => op('PSH', 0) + op('STORE', slot))
+            .map((slot) => op('PSH', 0) + op('GSTORE', slot))
             .join('');
         asm += this.start.join('') + op('HLT');
         this.isInitialized = false;
