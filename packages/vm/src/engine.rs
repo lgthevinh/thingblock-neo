@@ -4,11 +4,13 @@ mod opcode;
 pub use error::EngineError;
 pub use opcode::OpCode;
 
+use crate::Runtime;
+
 const STACK_LEN: usize = 256;
 const LOCAL_SLOT: usize = 16;
 const CALL_DEPTH: usize = 8;
 
-pub type NativeFn = fn(&mut Engine) -> Result<(), EngineError>;
+pub type NativeFn = fn(&mut Engine, &mut Runtime) -> Result<(), EngineError>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EngineStatus {
@@ -49,6 +51,7 @@ impl Engine {
         &mut self,
         code: &[i32],
         natives: &[NativeFn],
+        runtime: &mut Runtime,
     ) -> Result<Option<EngineStatus>, EngineError> {
         let op = OpCode::try_from(self.fetch_slot(code)?)?;
         match op {
@@ -108,7 +111,7 @@ impl Engine {
                     .ok()
                     .and_then(|i| natives.get(i))
                     .ok_or(EngineError::BadNative(id))?;
-                native(self)?;
+                native(self, runtime)?;
             }
         }
         Ok(None)

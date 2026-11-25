@@ -1,12 +1,13 @@
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 
-use crate::{Engine, EngineError, EngineStatus, NativeFn};
+use crate::{Engine, EngineError, EngineStatus, NativeFn, Runtime};
 
 pub struct Vm {
     code: Vec<i32>,
     natives: &'static [NativeFn],
     engine: Engine,
+    runtime: Runtime,
     stop: Arc<AtomicBool>,
 }
 
@@ -16,6 +17,7 @@ impl Vm {
             code: Vec::new(),
             natives,
             engine: Engine::default(),
+            runtime: Runtime::default(),
             stop: Arc::new(AtomicBool::new(false)),
         }
     }
@@ -35,7 +37,10 @@ impl Vm {
     /// Runs until the program halts, waits or is stopped.
     pub fn run(&mut self) -> Result<EngineStatus, EngineError> {
         while !self.stop.load(Ordering::Relaxed) {
-            if let Some(status) = self.engine.exec_instruction(&self.code, self.natives)? {
+            if let Some(status) =
+                self.engine
+                    .exec_instruction(&self.code, self.natives, &mut self.runtime)?
+            {
                 return Ok(status);
             }
         }
