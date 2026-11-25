@@ -1,4 +1,4 @@
-use crate::VmError;
+use super::EngineError;
 
 #[repr(i32)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -26,9 +26,9 @@ pub enum OpCode {
 }
 
 impl TryFrom<i32> for OpCode {
-    type Error = VmError;
+    type Error = EngineError;
 
-    fn try_from(val: i32) -> Result<Self, VmError> {
+    fn try_from(val: i32) -> Result<Self, EngineError> {
         use OpCode::*;
         Ok(match val {
             0 => Hlt,
@@ -51,7 +51,7 @@ impl TryFrom<i32> for OpCode {
             17 => Wait,
             18 => InvokeStatic,
             19 => InvokeNative,
-            _ => return Err(VmError::BadOpcode(val)),
+            _ => return Err(EngineError::BadOpcode(val)),
         })
     }
 }

@@ -1,4 +1,4 @@
-use crate::{Engine, NativeFn, Status, VmError};
+use crate::{Engine, EngineError, NativeFn, Status};
 
 pub struct Vm {
     code: Vec<i32>,
@@ -20,7 +20,7 @@ impl Vm {
         self.engine.reset_state();
     }
 
-    pub fn run(&mut self) -> Result<Status, VmError> {
+    pub fn run(&mut self) -> Result<Status, EngineError> {
         loop {
             if let Some(status) = self.engine.exec_instruction(&self.code, self.natives)? {
                 return Ok(status);

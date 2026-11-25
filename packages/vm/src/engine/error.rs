@@ -1,8 +1,7 @@
-use crate::OpCode;
-
+use super::OpCode;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum VmError {
+pub enum EngineError {
     BadOpcode(i32),
     PcOutOfRange(usize),
     BadTarget(i32),

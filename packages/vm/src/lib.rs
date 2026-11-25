@@ -1,9 +1,5 @@
 mod engine;
-mod error;
-mod opcode;
 mod vm;
 
-pub use engine::{Engine, NativeFn, Status};
-pub use error::VmError;
-pub use opcode::OpCode;
+pub use engine::{Engine, EngineError, NativeFn, OpCode, Status};
 pub use vm::Vm;
