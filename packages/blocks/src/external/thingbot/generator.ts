@@ -1,10 +1,10 @@
 import type * as Blockly from 'blockly';
-import { op, value, type ThingbotVmGenerator } from '../../generator/thingbot_vm.ts';
-import type { OpName } from '../../generator/thingbot_vm/opcode.ts';
+import { op, value, type ThingcodeGenerator } from '../../generator/thingcode.ts';
+import type { OpName } from '../../generator/thingcode/opcode.ts';
 
 // Device picked by the ID dropdown: pushes the id, then the input value, then runs the opcode.
 function device(name: OpName, input: string, stoppable: boolean) {
-    return (block: Blockly.Block, generator: ThingbotVmGenerator) => {
+    return (block: Blockly.Block, generator: ThingcodeGenerator) => {
         const id = Number(block.getFieldValue('ID'));
         if (stoppable) generator.stops.add(op('PSH', id) + op('PSH', 0) + op(name));
         return op('PSH', id) + value(block, generator, input) + op(name);
@@ -17,11 +17,11 @@ export const thingbot = {
     thingbot_servo: device('SERVO', 'ANGLE', false),
     thingbot_spin: device('SPIN', 'SPEED', true),
     thingbot_led: device('LED', 'BRIGHTNESS', true),
-    thingbot_buzzer(block: Blockly.Block, generator: ThingbotVmGenerator) {
+    thingbot_buzzer(block: Blockly.Block, generator: ThingcodeGenerator) {
         generator.stops.add(op('PSH', 0) + op('BUZZ'));
         return value(block, generator, 'DUTY') + op('BUZZ');
     },
-    thingbot_wait(block: Blockly.Block, generator: ThingbotVmGenerator) {
+    thingbot_wait(block: Blockly.Block, generator: ThingcodeGenerator) {
         return value(block, generator, 'MS') + op('WAIT');
     },
 };

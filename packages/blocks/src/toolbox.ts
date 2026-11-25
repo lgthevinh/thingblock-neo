@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly';
 import type { utils } from 'blockly';
-import { MAX_VARIABLES } from './generator/thingbot_vm.ts';
+import { MAX_VARIABLES } from './generator/thingcode.ts';
 
 // Number shadow for a block input, so it shows an editable default.
 function number(value: number) {

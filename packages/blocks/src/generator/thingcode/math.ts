@@ -1,5 +1,5 @@
 import type * as Blockly from 'blockly';
-import { Order, op, value, type ThingbotVmGenerator } from '../thingbot_vm.ts';
+import { Order, op, value, type ThingcodeGenerator } from '../thingcode.ts';
 import type { OpName } from './opcode.ts';
 
 const OPERATORS: Record<string, OpName> = {
@@ -22,7 +22,7 @@ export const math = {
     math_integer: number,
     math_whole_number: number,
     math_positive_number: number,
-    math_arithmetic(block: Blockly.Block, generator: ThingbotVmGenerator): [string, number] {
+    math_arithmetic(block: Blockly.Block, generator: ThingcodeGenerator): [string, number] {
         const name = OPERATORS[block.getFieldValue('OP')];
         if (!name)
             throw new Error(

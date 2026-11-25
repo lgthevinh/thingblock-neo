@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { thingbotVmGenerator, type Blockly } from '@thingblock-neo/blocks';
+    import { thingcodeGenerator, type Blockly } from '@thingblock-neo/blocks';
     import Workspace from './lib/workspace/Workspace.svelte';
     import CodeSubpanel from './lib/sidepanel/CodeSubpanel.svelte';
     import MonitorSubpanel from './lib/sidepanel/MonitorSubpanel.svelte';
@@ -37,7 +37,7 @@
     // Regenerates the code; blocks the VM can't run throw, so show the reason instead.
     function generate(ws: Blockly.WorkspaceSvg) {
         try {
-            code = thingbotVmGenerator.workspaceToCode(ws);
+            code = thingcodeGenerator.workspaceToCode(ws);
         } catch (e) {
             code = `// Cannot generate code: ${e instanceof Error ? e.message : e}`;
         }

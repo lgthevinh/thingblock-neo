@@ -1,3 +1,5 @@
+//! Stack-based VM that runs Thingcode programs.
+
 mod engine;
 mod vm;
 
