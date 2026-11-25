@@ -22,6 +22,12 @@ pub struct Io {
 }
 
 impl Io {
+    /// Adds a connection, returning its index.
+    pub fn add(&mut self, conn: Box<dyn Connection>) -> i32 {
+        self.connections.push(conn);
+        (self.connections.len() - 1) as i32
+    }
+
     /// The connection at `idx`, as a native pops it from the stack.
     pub fn get_connections(&mut self, idx: i32) -> Result<&mut dyn Connection, IoError> {
         usize::try_from(idx)
