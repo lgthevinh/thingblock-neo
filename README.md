@@ -1,6 +1,6 @@
 # ThingBlock Neo
 
-A block-based programming editor built on Blockly, using Thingcode VM - a stack-based VM.
+A block-based programming editor built on Blockly, using Thingcode VM - a stack-based VM, which I build for education purpose, getting ideas from WASM and JVM.
 
 ## Install
 
