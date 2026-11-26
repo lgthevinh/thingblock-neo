@@ -63,9 +63,11 @@
         background: #fff;
         overflow: hidden;
     }
+    /* Run button on the left, panel menu on the right. */
     .header {
         display: flex;
         align-items: center;
+        justify-content: space-between;
     }
     /* Invisible grab strip straddling the left border. */
     .handle {

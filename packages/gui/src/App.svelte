@@ -6,6 +6,8 @@
     import RunButton from './lib/sidepanel/RunButton.svelte';
     import HeaderBar from './lib/header/HeaderBar.svelte';
     import SidePanel from './lib/sidepanel/SidePanel.svelte';
+    import PanelMenu from './lib/sidepanel/PanelMenu.svelte';
+    import PanelsIcon from './lib/components/icons/PanelsIcon.svelte';
     import BlocklyDialogs from './lib/workspace/BlocklyDialogs.svelte';
     import SettingsDialog from './lib/settings/SettingsDialog.svelte';
     import * as vm from './lib/vm.ts';
@@ -107,16 +109,24 @@
 />
 
 <div class="app">
-    <HeaderBar bind:panels onsettings={() => (settingsOpen = true)} />
+    <HeaderBar onsettings={() => (settingsOpen = true)} />
     <main>
         <div><Workspace onchange={generate} /></div>
         <SidePanel bind:width={panelWidth}>
             {#snippet header()}
                 <RunButton {running} disabled={!vm.hasVm} onrun={run} onstop={vm.stop} />
+                <PanelMenu bind:panels />
             {/snippet}
             {#if panels.code}<CodeSubpanel {code} />{/if}
             {#if panels.monitor}
                 <MonitorSubpanel {lines} onsend={send} onclear={() => (lines = [])} />
+            {/if}
+            <!-- Holds the header at the top when every panel is hidden. -->
+            {#if !panels.code && !panels.monitor}
+                <div class="placeholder">
+                    <PanelsIcon size={48} />
+                    No panel shown. Use the panels button above to show one.
+                </div>
             {/if}
         </SidePanel>
     </main>
@@ -137,5 +147,21 @@
         grid-template-columns: minmax(0, 1fr) auto;
         /* Without a bounded row the side panel grows with its content instead of scrolling. */
         grid-template-rows: minmax(0, 1fr);
+    }
+    /* Same as thingblock-editor's empty side panel. */
+    .placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        color: rgba(87, 94, 117, 0.75);
+        font:
+            0.875rem 'Helvetica Neue',
+            Helvetica,
+            Arial,
+            sans-serif;
+        text-align: center;
     }
 </style>
