@@ -99,10 +99,11 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
                 { kind: 'block', type: 'control_forever' },
                 { kind: 'block', type: 'control_while' },
                 { kind: 'block', type: 'control_wait', inputs: { MS: number(1000) } },
-                { kind: 'block', type: 'logic_compare' },
+                { kind: 'block', type: 'logic_lt', inputs: { A: number(0), B: number(50) } },
+                { kind: 'block', type: 'logic_equals', inputs: { A: number(0), B: number(50) } },
+                { kind: 'block', type: 'logic_gt', inputs: { A: number(0), B: number(50) } },
                 { kind: 'block', type: 'logic_operation' },
                 { kind: 'block', type: 'logic_negate' },
-                { kind: 'block', type: 'logic_boolean' },
             ],
         },
         {
@@ -110,15 +111,10 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
             name: 'Math',
             categorystyle: 'math_category',
             contents: [
-                { kind: 'block', type: 'math_number' },
-                {
-                    kind: 'block',
-                    type: 'math_arithmetic',
-                    inputs: {
-                        A: { shadow: { type: 'math_number' } },
-                        B: { shadow: { type: 'math_number' } },
-                    },
-                },
+                { kind: 'block', type: 'math_add', inputs: { A: number(0), B: number(0) } },
+                { kind: 'block', type: 'math_subtract', inputs: { A: number(0), B: number(0) } },
+                { kind: 'block', type: 'math_multiply', inputs: { A: number(0), B: number(0) } },
+                { kind: 'block', type: 'math_divide', inputs: { A: number(0), B: number(0) } },
                 {
                     kind: 'block',
                     type: 'math_modulo',
@@ -131,7 +127,6 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
             name: 'Text',
             categorystyle: 'text_category',
             contents: [
-                { kind: 'block', type: 'text' },
                 { kind: 'block', type: 'text_print', inputs: { VALUE: textShadow('Hello!') } },
                 {
                     kind: 'block',

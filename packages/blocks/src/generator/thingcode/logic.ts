@@ -7,6 +7,14 @@ function bool(block: Blockly.Block, generator: ThingcodeGenerator, input: string
     return value(block, generator, input) + op('PSH', 0) + op('NEQ');
 }
 
+/** Generator for a two-input comparison block that ends with the given opcode. */
+function compare(name: OpName) {
+    return (block: Blockly.Block, generator: ThingcodeGenerator): [string, number] => [
+        value(block, generator, 'A') + value(block, generator, 'B') + op(name),
+        Order.ATOMIC,
+    ];
+}
+
 export const logic = {
     // There is no jump-if-zero, so each condition is inverted with EQ 0 before JNZ skips its branch.
     controls_if(block: Blockly.Block, generator: ThingcodeGenerator) {
@@ -62,11 +70,9 @@ export const logic = {
     control_wait(block: Blockly.Block, generator: ThingcodeGenerator) {
         return value(block, generator, 'MS') + op('WAIT');
     },
-    // Blockly's OP values (EQ, NEQ, LT, LTE, GT, GTE) are the VM's opcode names.
-    logic_compare(block: Blockly.Block, generator: ThingcodeGenerator): [string, number] {
-        const code = value(block, generator, 'A') + value(block, generator, 'B');
-        return [code + op(block.getFieldValue('OP') as OpName), Order.ATOMIC];
-    },
+    logic_lt: compare('LT'),
+    logic_equals: compare('EQ'),
+    logic_gt: compare('GT'),
     logic_operation(block: Blockly.Block, generator: ThingcodeGenerator): [string, number] {
         const code = bool(block, generator, 'A') + bool(block, generator, 'B');
         if (block.getFieldValue('OP') === 'AND') return [code + op('MUL'), Order.ATOMIC];
@@ -74,8 +80,5 @@ export const logic = {
     },
     logic_negate(block: Blockly.Block, generator: ThingcodeGenerator): [string, number] {
         return [value(block, generator, 'BOOL') + op('PSH', 0) + op('EQ'), Order.ATOMIC];
-    },
-    logic_boolean(block: Blockly.Block): [string, number] {
-        return [op('PSH', block.getFieldValue('BOOL') === 'TRUE' ? 1 : 0), Order.ATOMIC];
     },
 };

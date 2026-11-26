@@ -6,7 +6,7 @@ export const text = {
     text: {
         init(this: Blockly.Block) {
             this.jsonInit({
-                message0: '\"%1\"',
+                message0: '%1',
                 args0: [{ type: 'field_input', name: 'TEXT' }],
                 output: 'String',
                 style: STYLE,

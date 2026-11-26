@@ -3,6 +3,25 @@ import type * as Blockly from 'blockly';
 // Scratch's control colours, which the logic blocks already use.
 const STYLE = 'logic_blocks';
 
+/** Boolean reporter that compares two values with a fixed operator symbol. */
+function compare(symbol: string, tooltip: string) {
+    return {
+        init(this: Blockly.Block) {
+            this.jsonInit({
+                message0: `%1 ${symbol} %2`,
+                args0: [
+                    { type: 'input_value', name: 'A' },
+                    { type: 'input_value', name: 'B' },
+                ],
+                inputsInline: true,
+                output: 'Boolean',
+                style: STYLE,
+                tooltip,
+            });
+        },
+    };
+}
+
 export const control = {
     control_repeat: {
         init(this: Blockly.Block) {
@@ -57,4 +76,7 @@ export const control = {
             });
         },
     },
+    logic_lt: compare('<', 'True if the first value is less than the second'),
+    logic_equals: compare('=', 'True if both values are equal'),
+    logic_gt: compare('>', 'True if the first value is greater than the second'),
 };

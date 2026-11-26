@@ -2,12 +2,13 @@ import type * as Blockly from 'blockly';
 import { Order, op, value, type ThingcodeGenerator } from '../thingcode.ts';
 import type { OpName } from './opcode.ts';
 
-const OPERATORS: Record<string, OpName> = {
-    ADD: 'ADD',
-    MINUS: 'SUB',
-    MULTIPLY: 'MUL',
-    DIVIDE: 'DIV',
-};
+/** Generator for a two-input arithmetic block that ends with the given opcode. */
+function arithmetic(name: OpName) {
+    return (block: Blockly.Block, generator: ThingcodeGenerator): [string, number] => [
+        value(block, generator, 'A') + value(block, generator, 'B') + op(name),
+        Order.ATOMIC,
+    ];
+}
 
 // Shared by every number block variant: they differ only in field constraints.
 function number(block: Blockly.Block): [string, number] {
@@ -23,17 +24,10 @@ export const math = {
     math_integer: number,
     math_whole_number: number,
     math_positive_number: number,
-    math_arithmetic(block: Blockly.Block, generator: ThingcodeGenerator): [string, number] {
-        const name = OPERATORS[block.getFieldValue('OP')];
-        if (!name)
-            throw new Error(
-                `ThingBot does not support ${block.getFieldValue('OP').toLowerCase()} yet`,
-            );
-        return [
-            value(block, generator, 'A') + value(block, generator, 'B') + op(name),
-            Order.ATOMIC,
-        ];
-    },
+    math_add: arithmetic('ADD'),
+    math_subtract: arithmetic('SUB'),
+    math_multiply: arithmetic('MUL'),
+    math_divide: arithmetic('DIV'),
     math_modulo(block: Blockly.Block, generator: ThingcodeGenerator): [string, number] {
         return [
             value(block, generator, 'DIVIDEND') + value(block, generator, 'DIVISOR') + op('MOD'),

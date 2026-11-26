@@ -2,6 +2,25 @@ import type * as Blockly from 'blockly';
 
 const STYLE = 'math_blocks';
 
+/** Reporter that takes two numbers on either side of a fixed operator symbol. */
+function arithmetic(symbol: string, tooltip: string) {
+    return {
+        init(this: Blockly.Block) {
+            this.jsonInit({
+                message0: `%1 ${symbol} %2`,
+                args0: [
+                    { type: 'input_value', name: 'A', check: 'Number' },
+                    { type: 'input_value', name: 'B', check: 'Number' },
+                ],
+                inputsInline: true,
+                output: 'Number',
+                style: STYLE,
+                tooltip,
+            });
+        },
+    };
+}
+
 export const math = {
     math_number: {
         init(this: Blockly.Block) {
@@ -47,30 +66,8 @@ export const math = {
             });
         },
     },
-    // Replaces Blockly's stock block to leave out ^, which the VM has no opcode for.
-    math_arithmetic: {
-        init(this: Blockly.Block) {
-            this.jsonInit({
-                message0: '%1 %2 %3',
-                args0: [
-                    { type: 'input_value', name: 'A', check: 'Number' },
-                    {
-                        type: 'field_dropdown',
-                        name: 'OP',
-                        options: [
-                            ['+', 'ADD'],
-                            ['−', 'MINUS'],
-                            ['×', 'MULTIPLY'],
-                            ['÷', 'DIVIDE'],
-                        ],
-                    },
-                    { type: 'input_value', name: 'B', check: 'Number' },
-                ],
-                inputsInline: true,
-                output: 'Number',
-                style: STYLE,
-                tooltip: 'Add, subtract, multiply or divide two whole numbers',
-            });
-        },
-    },
+    math_add: arithmetic('+', 'Add two whole numbers'),
+    math_subtract: arithmetic('−', 'Subtract the second number from the first'),
+    math_multiply: arithmetic('×', 'Multiply two whole numbers'),
+    math_divide: arithmetic('÷', 'Divide the first number by the second'),
 };
