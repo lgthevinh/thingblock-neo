@@ -23,6 +23,15 @@ export function value(block: Blockly.Block, generator: ThingcodeGenerator, input
     return generator.valueToCode(block, input, Order.NONE) || op('PSH', 0);
 }
 
+// Every loop iteration waits a little, so a loop without a `wait` cannot hog the CPU. 10 ms is one
+// FreeRTOS tick on ThingBot; a shorter wait rounds down to no delay and starves its idle task.
+const LOOP_WAIT = 10;
+
+/** The jump back to a loop's start, after the per-iteration wait. */
+export function loopBack(start: string): string {
+    return op('PSH', LOOP_WAIT) + op('WAIT') + op('JMP', start);
+}
+
 /** Code that pushes the `ptr len` of a text input, or an empty text when it is empty. */
 export function text(block: Blockly.Block, generator: ThingcodeGenerator, input: string): string {
     return generator.valueToCode(block, input, Order.NONE) || op('PSH', 0) + op('PSH', 0);

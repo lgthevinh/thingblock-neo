@@ -1,5 +1,5 @@
 import type * as Blockly from 'blockly';
-import { Order, op, value, type ThingcodeGenerator } from '../thingcode.ts';
+import { Order, loopBack, op, value, type ThingcodeGenerator } from '../thingcode.ts';
 import type { OpName } from './opcode.ts';
 
 // Any non-zero value is true; NEQ 0 turns it into exactly 1 so AND/OR can use MUL/ADD.
@@ -40,13 +40,13 @@ export const logic = {
             code +
             generator.statementToCode(block, 'SUBSTACK') +
             step +
-            op('JMP', start) +
+            loopBack(start) +
             `${end}:\n`
         );
     },
     control_forever(block: Blockly.Block, generator: ThingcodeGenerator) {
         const start = generator.label();
-        return `${start}:\n` + generator.statementToCode(block, 'SUBSTACK') + op('JMP', start);
+        return `${start}:\n` + generator.statementToCode(block, 'SUBSTACK') + loopBack(start);
     },
     control_while(block: Blockly.Block, generator: ThingcodeGenerator) {
         const start = generator.label();
@@ -57,7 +57,7 @@ export const logic = {
             op('PSH', 0) +
             op('EQ') +
             op('JNZ', end);
-        return code + generator.statementToCode(block, 'SUBSTACK') + op('JMP', start) + `${end}:\n`;
+        return code + generator.statementToCode(block, 'SUBSTACK') + loopBack(start) + `${end}:\n`;
     },
     control_wait(block: Blockly.Block, generator: ThingcodeGenerator) {
         return value(block, generator, 'MS') + op('WAIT');

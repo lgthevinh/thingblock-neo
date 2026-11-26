@@ -35,4 +35,5 @@ Object.assign(
 export { Blockly };
 export { toolbox, setupVariables } from './toolbox.ts';
 export { theme } from './theme.ts';
+export { hidUsage } from './common/events.ts';
 export { thingcodeGenerator, type Program } from './generator/thingcode.ts';

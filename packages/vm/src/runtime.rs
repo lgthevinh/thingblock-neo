@@ -20,7 +20,7 @@ pub static NATIVES: &[NativeFn] = &[
     hid::key_pressed,
     stdio::print_int,
     stdio::print_str,
-    stdio::read_line,
+    stdio::read_str,
 ];
 
 /// Host environment that natives act on.

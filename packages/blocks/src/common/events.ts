@@ -2,18 +2,37 @@ import type * as Blockly from 'blockly';
 
 const STYLE = 'event_blocks';
 
-// Each key's value is its HID usage ID, with 0 for any key.
-const KEYS: [string, string][] = [
-    ['space', '44'],
-    ['up arrow', '82'],
-    ['down arrow', '81'],
-    ['right arrow', '79'],
-    ['left arrow', '80'],
-    ['any', '0'],
-    ...[...'abcdefghijklmnopqrstuvwxyz'].map((key, i): [string, string] => [key, `${4 + i}`]),
-    // HID orders the digits 1 to 9, then 0.
-    ...[...'0123456789'].map((key): [string, string] => [key, `${key === '0' ? 39 : 29 + +key}`]),
+type Key = [label: string, code: string, usage: number];
+
+// The keys the blocks name: dropdown label, KeyboardEvent.code, and HID usage ID.
+const NAMED: Key[] = [
+    ['space', 'Space', 44],
+    ['up arrow', 'ArrowUp', 82],
+    ['down arrow', 'ArrowDown', 81],
+    ['right arrow', 'ArrowRight', 79],
+    ['left arrow', 'ArrowLeft', 80],
 ];
+const CHARS: Key[] = [
+    ...[...'abcdefghijklmnopqrstuvwxyz'].map((key, i): Key => [
+        key,
+        `Key${key.toUpperCase()}`,
+        4 + i,
+    ]),
+    // HID orders the digits 1 to 9, then 0.
+    ...[...'0123456789'].map((key): Key => [key, `Digit${key}`, key === '0' ? 39 : 29 + +key]),
+];
+
+// Dropdown values are HID usage IDs, with 0 for any key.
+const KEYS = [...NAMED, ['any', '', 0] as Key, ...CHARS].map(
+    ([label, , usage]): [string, string] => [label, `${usage}`],
+);
+
+const USAGES = new Map([...NAMED, ...CHARS].map(([, code, usage]) => [code, usage]));
+
+/** The HID usage ID of a `KeyboardEvent.code`, for the keys the blocks name. */
+export function hidUsage(code: string): number | undefined {
+    return USAGES.get(code);
+}
 
 export const events = {
     event_when_run: {

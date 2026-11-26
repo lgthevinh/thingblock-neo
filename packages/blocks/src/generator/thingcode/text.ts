@@ -3,12 +3,13 @@ import {
     ANSWER_LEN,
     ANSWER_PTR,
     Order,
+    loopBack,
     op,
     text as textValue,
     value,
     type ThingcodeGenerator,
 } from '../thingcode.ts';
-import { PRINT_INT, PRINT_STR, READ_LINE } from './natives.ts';
+import { PRINT_INT, PRINT_STR, READ_STR } from './natives.ts';
 
 // The answer's length lives in a hidden variable slot; its bytes are at ANSWER_PTR.
 const ANSWER = 'text:answer';
@@ -27,7 +28,7 @@ export const text = {
         if (isText) return textValue(block, generator, 'VALUE') + op('INVOKE_NATIVE', PRINT_STR);
         return value(block, generator, 'VALUE') + op('INVOKE_NATIVE', PRINT_INT);
     },
-    // READ_LINE returns ERR_AGAIN until a line arrives, so poll it with a short WAIT.
+    // READ_STR returns ERR_AGAIN until a line arrives, so poll it like a loop.
     text_ask(block: Blockly.Block, generator: ThingcodeGenerator) {
         const answer = generator.variable(ANSWER);
         const start = generator.label();
@@ -38,15 +39,13 @@ export const text = {
             `${start}:\n` +
             op('PSH', ANSWER_PTR) +
             op('PSH', ANSWER_LEN) +
-            op('INVOKE_NATIVE', READ_LINE) +
+            op('INVOKE_NATIVE', READ_STR) +
             op('GSTORE', answer) +
             op('GLOAD', answer) +
             op('PSH', 0) +
             op('GTE') +
             op('JNZ', end) +
-            op('PSH', 10) +
-            op('WAIT') +
-            op('JMP', start) +
+            loopBack(start) +
             `${end}:\n`
         );
     },

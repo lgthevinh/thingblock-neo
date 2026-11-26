@@ -3,7 +3,11 @@
 
     const MIN_WIDTH = 240;
 
-    let { width = $bindable(400), children }: { width?: number; children: Snippet } = $props();
+    let {
+        width = $bindable(400),
+        header,
+        children,
+    }: { width?: number; header: Snippet; children?: Snippet } = $props();
 
     // Drags the left edge to resize; pointer capture keeps the drag alive over the Blockly canvas.
     function startResize(e: PointerEvent) {
@@ -29,15 +33,22 @@
 </script>
 
 <aside style:width="{width}px">
-    <div class="handle" role="separator" aria-orientation="vertical" onpointerdown={startResize}></div>
-    {@render children()}
+    <div
+        class="handle"
+        role="separator"
+        aria-orientation="vertical"
+        onpointerdown={startResize}
+    ></div>
+    <div class="header">{@render header()}</div>
+    {@render children?.()}
 </aside>
 
 <style>
-    /* Stacks child panels, each getting an equal share of the height. */
+    /* The header row, then the child panels, each getting an equal share of the height. */
     aside {
         position: relative;
         display: grid;
+        grid-template-rows: auto;
         grid-auto-rows: minmax(0, 1fr);
         gap: 8px;
         padding: 8px;
@@ -46,11 +57,15 @@
         background: #fafafa;
     }
     /* Card look for every child panel. */
-    aside > :global(:not(.handle)) {
+    aside > :global(:not(.handle, .header)) {
         border: 1px solid #ddd;
         border-radius: 8px;
         background: #fff;
         overflow: hidden;
+    }
+    .header {
+        display: flex;
+        align-items: center;
     }
     /* Invisible grab strip straddling the left border. */
     .handle {
