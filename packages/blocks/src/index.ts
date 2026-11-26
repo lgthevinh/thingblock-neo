@@ -9,6 +9,7 @@ import { thingcodeGenerator } from './generator/thingcode.ts';
 import { events as eventsCode } from './generator/thingcode/events.ts';
 import { logic as logicCode } from './generator/thingcode/logic.ts';
 import { math as mathCode } from './generator/thingcode/math.ts';
+import { text as textCode } from './generator/thingcode/text.ts';
 import { variables as variablesCode } from './generator/thingcode/variables.ts';
 import { thingbotTelemetrix } from './external/thingbot-telemetrix/blocks.ts';
 
@@ -21,7 +22,14 @@ Blockly.common.defineBlocks({
     ...thingbotTelemetrix,
 });
 
-Object.assign(thingcodeGenerator.forBlock, eventsCode, logicCode, mathCode, variablesCode);
+Object.assign(
+    thingcodeGenerator.forBlock,
+    eventsCode,
+    logicCode,
+    mathCode,
+    textCode,
+    variablesCode,
+);
 
 // Re-exported so the page uses the same Blockly instance the blocks were registered on.
 export { Blockly };

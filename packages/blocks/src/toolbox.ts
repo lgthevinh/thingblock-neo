@@ -7,6 +7,11 @@ function number(value: number) {
     return { shadow: { type: 'math_number', fields: { NUM: value } } };
 }
 
+// Text shadow for a block input, so it shows an editable default.
+function textShadow(value: string) {
+    return { shadow: { type: 'text', fields: { TEXT: value } } };
+}
+
 /** Scratch-style Variables flyout: the create button, a reporter per variable, then set and change. */
 function variablesCategory(workspace: Blockly.WorkspaceSvg): utils.toolbox.FlyoutItemInfoArray {
     const variables = workspace
@@ -81,6 +86,7 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
             contents: [
                 { kind: 'block', type: 'event_when_run' },
                 { kind: 'block', type: 'event_when_key_pressed' },
+                { kind: 'block', type: 'event_key_pressed' },
             ],
         },
         {
@@ -118,6 +124,21 @@ export const toolbox: utils.toolbox.ToolboxInfo = {
                     type: 'math_modulo',
                     inputs: { DIVIDEND: number(10), DIVISOR: number(3) },
                 },
+            ],
+        },
+        {
+            kind: 'category',
+            name: 'Text',
+            categorystyle: 'text_category',
+            contents: [
+                { kind: 'block', type: 'text' },
+                { kind: 'block', type: 'text_print', inputs: { VALUE: textShadow('Hello!') } },
+                {
+                    kind: 'block',
+                    type: 'text_ask',
+                    inputs: { QUESTION: textShadow("What's your name?") },
+                },
+                { kind: 'block', type: 'text_answer' },
             ],
         },
         {

@@ -7,6 +7,7 @@ pub use error::EngineError;
 pub use opcode::OpCode;
 
 use crate::Runtime;
+use crate::runtime::{NATIVES, NATIVES_BASE};
 
 const STACK_LEN: usize = 256;
 const GLOBAL_SLOT: usize = 256;
@@ -53,6 +54,12 @@ impl Engine {
 
     pub fn pop_stack(&mut self) -> Result<i32, EngineError> {
         self.stack.pop().ok_or(EngineError::StackUnderflow)
+    }
+
+    /// The memory bytes `ptr .. ptr + len`, as a native reads or writes a buffer.
+    pub fn mem(&mut self, ptr: i32, len: i32) -> Result<&mut [u8], EngineError> {
+        let len = usize::try_from(len).map_err(|_| EngineError::BadAddress(ptr))?;
+        Ok(&mut self.memory[Self::mem_range(ptr, len)?])
     }
 
     pub fn reset_state(&mut self) {
@@ -123,9 +130,15 @@ impl Engine {
             OpCode::InvokeStatic => return Err(EngineError::NotImplemented(op)),
             OpCode::InvokeNative => {
                 let id = self.fetch_slot(code)?;
-                let native = usize::try_from(id)
+                // Ids from NATIVES_BASE up are the runtime's specific natives, below it the host's
+                let (table, idx) = if id >= NATIVES_BASE {
+                    (NATIVES, id - NATIVES_BASE)
+                } else {
+                    (natives, id)
+                };
+                let native = usize::try_from(idx)
                     .ok()
-                    .and_then(|i| natives.get(i))
+                    .and_then(|i| table.get(i))
                     .ok_or(EngineError::BadNative(id))?;
                 native(self, runtime)?;
             }

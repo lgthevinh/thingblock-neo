@@ -9,6 +9,10 @@ export const Order = {
 
 export const MAX_VARIABLES = 256;
 
+// The `ask` input buffer sits at the top of the VM's 4096-byte memory; text literals fill memory from 0.
+export const ANSWER_PTR = 3840;
+export const ANSWER_LEN = 256;
+
 /** One assembly line: an opcode with an optional operand (a number or a label). */
 export function op(name: OpName, operand?: number | string): string {
     return operand === undefined ? `${name}\n` : `${name} ${operand}\n`;
@@ -17,6 +21,11 @@ export function op(name: OpName, operand?: number | string): string {
 /** Code that pushes the value of a block input, or 0 when it is empty. */
 export function value(block: Blockly.Block, generator: ThingcodeGenerator, input: string): string {
     return generator.valueToCode(block, input, Order.NONE) || op('PSH', 0);
+}
+
+/** Code that pushes the `ptr len` of a text input, or an empty text when it is empty. */
+export function text(block: Blockly.Block, generator: ThingcodeGenerator, input: string): string {
+    return generator.valueToCode(block, input, Order.NONE) || op('PSH', 0) + op('PSH', 0);
 }
 
 /** A compiled program: the slots the VM runs, and a readable listing of them. */
@@ -33,6 +42,9 @@ export interface Program {
  */
 export class ThingcodeGenerator extends Blockly.CodeGenerator {
     private readonly variables = new Map<string, number>();
+    // Text literals by their memory address, written to memory before the program starts.
+    private readonly literals = new Map<string, number>();
+    private literalEnd = 0;
     private labelCount = 0;
     // Bodies of the `when run` hat blocks, in workspace order.
     readonly start: string[] = [];
@@ -44,6 +56,8 @@ export class ThingcodeGenerator extends Blockly.CodeGenerator {
 
     override init(_workspace: Blockly.Workspace): void {
         this.variables.clear();
+        this.literals.clear();
+        this.literalEnd = 0;
         this.labelCount = 0;
         this.start.length = 0;
         this.isInitialized = true;
@@ -76,6 +90,7 @@ export class ThingcodeGenerator extends Blockly.CodeGenerator {
         let asm = [...this.variables.values()]
             .map((slot) => op('PSH', 0) + op('GSTORE', slot))
             .join('');
+        for (const [str, ptr] of this.literals) asm += storeBytes(ptr, utf8.encode(str));
         asm += this.start.join('') + op('HLT');
         this.isInitialized = false;
         return asm;
@@ -92,6 +107,23 @@ export class ThingcodeGenerator extends Blockly.CodeGenerator {
         return `L${this.labelCount++}`;
     }
 
+    /** The `[ptr, len]` of a text literal in memory, allocated on first use. */
+    literal(str: string): [number, number] {
+        const len = utf8.encode(str).length;
+        let ptr = this.literals.get(str);
+        if (ptr === undefined) {
+            ptr = this.literalEnd;
+            // Rounded up to whole words, since MSTORE32 writes 4 bytes at a time.
+            const end = ptr + Math.ceil(len / 4) * 4;
+            if (end > ANSWER_PTR) {
+                throw new Error(`ThingBot supports at most ${ANSWER_PTR} bytes of text`);
+            }
+            this.literalEnd = end;
+            this.literals.set(str, ptr);
+        }
+        return [ptr, len];
+    }
+
     /** The slot of a Blockly variable, allocated on first use. */
     variable(id: string): number {
         let slot = this.variables.get(id);
@@ -104,6 +136,22 @@ export class ThingcodeGenerator extends Blockly.CodeGenerator {
         }
         return slot;
     }
+}
+
+const utf8 = new TextEncoder();
+
+// One MSTORE32 per 4 bytes, little-endian, with the last word padded with zeros.
+function storeBytes(ptr: number, bytes: Uint8Array): string {
+    let asm = '';
+    for (let i = 0; i < bytes.length; i += 4) {
+        const word =
+            bytes[i] |
+            ((bytes[i + 1] ?? 0) << 8) |
+            ((bytes[i + 2] ?? 0) << 16) |
+            ((bytes[i + 3] ?? 0) << 24);
+        asm += op('PSH', ptr + i) + op('PSH', word) + op('MSTORE32');
+    }
+    return asm;
 }
 
 // Two passes: place labels at slot indices, then emit the slots and one listing row per instruction.
