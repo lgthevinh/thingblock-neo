@@ -1,13 +1,34 @@
 # ThingBlock Neo
 
-## Overview
+A block-based programming editor built on Blockly, using Thingcode VM - a stack-based VM.
 
-ThingBlock Neo is a block-based programming editor built on [Blockly](https://developers.google.com/blockly). The editor is a web page, and a Tauri desktop app hosts it in the system webview, so the same editor runs in a browser and as a native application.
+## Install
 
-## Components
+### Dependencies
 
-- **`packages/blocks`** (`@thingblock-neo/blocks`): TypeScript module that defines the blocks and the toolbox, and bundles Blockly. The app imports it directly as TypeScript; `make build-package` also bundles it standalone into `packages/blocks/dist/blocks.js`. Code generation, compiling and device flashing will live here.
-- **`packages/vm`** (Rust crate `vm`): stack-based VM that runs Thingcode, the bytecode the blocks compile to.
-- **`packages/gui`** (`@thingblock-neo/gui`): the editor frontend in Svelte 5 + Vite. It imports `blocks` and mounts the Blockly workspace.
-- **`app/src-tauri`**: Rust / Tauri 2 desktop shell. It serves the built frontend (`packages/gui/dist/`) in the system webview; the Rust service layer lives here too.
-- **`Makefile`**: shortcuts for the common commands: `make build-package` (build every package), `make build` (build the Tauri app), `make dev` (launch with live reload), `make clean`.
+- [Node.js](https://nodejs.org/) 22 or newer
+- [Rust](https://rustup.rs/) 1.85 or newer
+- The [Tauri 2 system dependencies](https://v2.tauri.app/start/prerequisites/) for your OS
+
+```sh
+git clone https://github.com/lgthevinh/thingblock-neo.git
+cd thingblock-neo
+npm install
+```
+
+## Usage
+
+```sh
+make dev     # launch the desktop app with live reload
+make build   # build the desktop app
+```
+
+To run the editor alone in a browser, use `npm run dev -w @thingblock-neo/gui`. Running programs needs the desktop app.
+
+## Contributing
+
+Questions and bug reports go in [GitHub issues](https://github.com/lgthevinh/thingblock-neo/issues). Pull requests are welcome; see [CONTRIBUTING.md](.github/CONTRIBUTING.md) for setup, code style and commit conventions.
+
+## License
+
+[GPL-3.0-only](LICENSE) © lgthevinh
